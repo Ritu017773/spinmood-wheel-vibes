@@ -5,15 +5,31 @@
       color-scheme: light dark;
     }
     circle, path, line {
-      stroke: #63A6FF;
+      stroke: #FFC107;
     }
     @media (prefers-color-scheme: dark) {
       circle, path, line {
-        stroke: #63A6FF;
+        stroke: #FFC107;
       }
     }
+    .center-circle {
+      fill: #FFC107;
+      stroke: #FFC107;
+    }
+    .car {
+      fill: #9370DB;
+      stroke: #6B46C1;
+    }
   </style>
-  <circle cx="12" cy="12" r="2"></circle>
+  <circle cx="12" cy="12" r="2" class="center-circle"></circle>
+  <circle cx="12" cy="3" r="2" class="car"></circle>
+  <circle cx="12" cy="21" r="2" class="car"></circle>
+  <circle cx="3" cy="12" r="2" class="car"></circle>
+  <circle cx="21" cy="12" r="2" class="car"></circle>
+  <circle cx="18.36" cy="5.64" r="2" class="car"></circle>
+  <circle cx="5.64" cy="18.36" r="2" class="car"></circle>
+  <circle cx="5.64" cy="5.64" r="2" class="car"></circle>
+  <circle cx="18.36" cy="18.36" r="2" class="car"></circle>
   <path d="M12 2v4"></path>
   <path d="M12 18v4"></path>
   <path d="m4.93 4.93 2.83 2.83"></path>

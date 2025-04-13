@@ -28,10 +28,10 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   const [hoverSlice, setHoverSlice] = useState<number | null>(null);
   const [scale, setScale] = useState(1);
   
-  // Initialize audio
+  // Initialize audio with direct URLs
   useEffect(() => {
-    spinSoundRef.current = new Audio('/sounds/spin.mp3');
-    resultSoundRef.current = new Audio('/sounds/result.mp3');
+    spinSoundRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    resultSoundRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
     
     return () => {
       if (spinSoundRef.current) {
@@ -48,22 +48,22 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     };
   }, []);
 
-  // Idle animation effect
+  // Idle animation effect - more fluid and bouncy
   useEffect(() => {
     if (isSpinning || entries.length < 2) return;
     
     let idleAngle = 0;
     let direction = 1;
-    let speed = 0.03; // Slower for a more subtle movement
+    let speed = 0.05; // Slightly faster for more noticeable movement
     
     const animateIdle = () => {
       if (isSpinning) return;
       
       idleAngle += speed * direction;
       
-      // Gentle back and forth motion
-      if (idleAngle > 3) direction = -1;
-      if (idleAngle < -3) direction = 1;
+      // More pronounced back and forth motion
+      if (idleAngle > 4) direction = -1;
+      if (idleAngle < -4) direction = 1;
       
       if (wheelRef.current) {
         wheelRef.current.style.transform = `rotate(${rotationDeg + idleAngle}deg) scale(${scale})`;
@@ -91,44 +91,53 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     
     setIsSpinning(true);
     setWinner(null);
-    setScale(1);
-
-    // Scale up animation
+    
+    // Enhanced animation sequence
+    // Initial anticipation - slight pullback
+    setScale(0.98);
     setTimeout(() => {
+      // Then quick scale up for emphasis
       setScale(1.05);
       setTimeout(() => setScale(1), 200);
-    }, 100);
+    }, 150);
 
     // Cancel any idle animation
     if (idleAnimationRef.current) {
       cancelAnimationFrame(idleAnimationRef.current);
     }
 
-    // Play spin sound
+    // Play spin sound with fallback
     if (soundEnabled && spinSoundRef.current) {
       spinSoundRef.current.currentTime = 0;
       spinSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
     }
     
-    // Calculate the spin - more dramatic now
-    const minSpins = 5; // Minimum number of complete rotations
-    const maxSpins = 10; // Maximum number of complete rotations
+    // Calculate the spin with variable speed profile for more natural motion
+    const minSpins = 6; // Increased minimum spins
+    const maxSpins = 12; // Increased maximum spins
     const spinCount = minSpins + Math.random() * (maxSpins - minSpins);
     const spinDegrees = spinCount * 360 + Math.random() * 360;
     const newRotationDeg = rotationDeg + spinDegrees;
     
-    // Apply motion blur during fast spin
+    // Apply motion blur during fast spin for premium feel
     if (wheelRef.current) {
-      wheelRef.current.style.filter = 'blur(1px)';
+      wheelRef.current.style.filter = 'blur(2px)';
+      
+      // Premium wheel spin animation with easing
+      wheelRef.current.style.transition = 'transform 5s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+      wheelRef.current.style.transform = `rotate(${newRotationDeg}deg)`;
     }
     
     setRotationDeg(newRotationDeg);
     
     // Calculate the winner
     setTimeout(() => {
-      // Remove blur effect
+      // Remove blur effect with slight delay for smooth transition
       if (wheelRef.current) {
-        wheelRef.current.style.filter = 'none';
+        wheelRef.current.style.filter = 'blur(0.5px)';
+        setTimeout(() => {
+          if (wheelRef.current) wheelRef.current.style.filter = 'none';
+        }, 200);
       }
       
       const degrees = newRotationDeg % 360;
@@ -137,7 +146,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       const actualWinner = entries[entries.length - 1 - winningIndex];
       
       setWinner(actualWinner);
-      onSpinComplete(actualWinner);
       
       // Play result sound
       if (soundEnabled && resultSoundRef.current) {
@@ -145,6 +153,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
       }
       
+      // Small bounce effect when result is shown
+      setScale(1.08);
+      setTimeout(() => setScale(1), 200);
+      
+      onSpinComplete(actualWinner);
       setIsSpinning(false);
     }, 5000); // Match this to the CSS animation duration
   };
@@ -175,11 +188,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         <div 
           ref={wheelRef}
           className={`absolute w-full h-full rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)] border-4 
-                     border-white/10 transition-all duration-[5s] ease-[cubic-bezier(0.1,0,0.3,1)]`}
+                     border-white/10`}
           style={{ 
             transform: `rotate(${rotationDeg}deg) scale(${scale})`,
             boxShadow: `0 0 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--${theme}-primary, rgba(255,255,255,0.3))`,
-            transition: isSpinning ? 'transform 5s cubic-bezier(0.1, 0, 0.3, 1)' : 'transform 0.3s ease-out'
+            transition: isSpinning ? 'transform 5s cubic-bezier(0.18, 0.89, 0.32, 1.28)' : 'transform 0.3s ease-out'
           }}
         >
           {entries.map((entry, index) => {
@@ -213,37 +226,37 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
                            text-sm md:text-base font-medium truncate px-8 pt-8"
                   style={{ transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)` }}
                 >
-                  {entry}
+                  <span className="font-bold">{entry}</span>
                 </div>
               </div>
             );
           })}
 
-          {/* Dynamic light reflections */}
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/5 pointer-events-none"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 pointer-events-none rounded-full"></div>
+          {/* Enhanced light reflections for premium feel */}
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none rounded-full"></div>
         </div>
         
-        {/* Dynamic glow effect around the wheel */}
+        {/* Enhanced glow effect around the wheel */}
         <div 
-          className="absolute -inset-4 rounded-full opacity-20 blur-xl z-0 animate-pulse-slow pointer-events-none"
+          className="absolute -inset-4 rounded-full opacity-30 blur-xl z-0 animate-pulse-slow pointer-events-none"
           style={{ 
             background: `radial-gradient(circle, var(--${theme}-primary) 0%, transparent 70%)` 
           }}
         ></div>
         
-        {/* Center spindle with more elaborate design */}
+        {/* Enhanced center spindle with more elaborate design */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 
                    rounded-full bg-gradient-to-br from-white/90 to-white/60 shadow-lg z-10 
                    flex items-center justify-center"
           style={{
             boxShadow: `0 0 15px var(--${theme}-primary, rgba(255,255,255,0.5))`,
           }}
         >
-          <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center">
             <div 
-              className="w-6 h-6 rounded-full bg-gradient-to-br animate-pulse"
+              className="w-8 h-8 rounded-full bg-gradient-to-br animate-pulse"
               style={{ 
                 background: `radial-gradient(circle, var(--${theme}-primary) 0%, var(--${theme}-secondary) 100%)` 
               }}
@@ -251,11 +264,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           </div>
         </div>
         
-        {/* Enhanced pointer */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 w-6 h-6 z-10">
+        {/* Enhanced pointer with shadow and glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4 w-8 h-8 z-10">
           <div 
-            className="w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] 
-                     border-r-transparent border-t-[24px] border-t-white drop-shadow-lg mx-auto"
+            className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] 
+                     border-r-transparent border-t-[28px] border-t-white drop-shadow-lg mx-auto"
             style={{
               filter: `drop-shadow(0 0 5px var(--${theme}-primary))`,
             }}  
@@ -266,7 +279,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       <button
         onClick={handleSpin}
         disabled={isSpinning || entries.length < 2}
-        className={`mt-10 px-10 py-5 bg-primary text-white rounded-full font-bold text-xl
+        className={`mt-10 px-12 py-5 bg-primary text-white rounded-full font-bold text-xl
                   transform transition-all duration-300 
                   ${isSpinning ? 
                     'opacity-50 cursor-not-allowed' : 
