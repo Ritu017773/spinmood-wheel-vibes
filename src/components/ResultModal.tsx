@@ -29,7 +29,7 @@ const ResultModal: React.FC<ResultModalProps> = ({
 
       const autoCloseTimer = setTimeout(() => {
         handleClose();
-      }, 3000); // Auto close after 3 seconds
+      }, 2000); // Auto close after 2 seconds
 
       return () => {
         clearTimeout(enterTimer);
@@ -75,16 +75,19 @@ const ResultModal: React.FC<ResultModalProps> = ({
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md transition-opacity duration-300 ${
         animation === 'entering' ? 'opacity-0' : 'opacity-100'
       } ${animation === 'exiting' ? 'opacity-0' : 'opacity-100'}`}
     >
       <div 
-        className={`relative w-11/12 max-w-lg bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl transition-all duration-300 ${
+        className={`relative w-11/12 max-w-xl bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-md rounded-xl border border-white/20 shadow-2xl transition-all duration-300 ${
           animation === 'entering' ? 'scale-90' : 'scale-100'
         } ${animation === 'exiting' ? 'scale-90' : 'scale-100'}`}
+        style={{
+          boxShadow: `0 0 50px var(--${theme}-primary), 0 0 100px rgba(0,0,0,0.5)`,
+        }}
       >
-        <Confetti isActive={animation === 'entering'} theme={theme} />
+        <Confetti isActive={animation === 'entering' || animation === 'entered'} theme={theme} />
         
         <button
           onClick={handleClose}
@@ -94,14 +97,15 @@ const ResultModal: React.FC<ResultModalProps> = ({
           <X size={20} />
         </button>
         
-        <div className="p-8">
+        <div className="p-8 sm:p-10">
           <div className="text-center">
-            <h3 className="text-xl font-medium text-white/80 mb-4">Your Result</h3>
+            <h3 className="text-xl font-medium text-white/80 mb-6">Your Result</h3>
             <div 
-              className={`text-3xl md:text-4xl font-bold mb-8 text-white animate-bounce-once`}
+              className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white animate-bounce-once`}
               style={{ 
-                textShadow: `0 0 15px var(--${theme}-primary)`,
-                color: `hsl(var(--${theme}-primary))` 
+                textShadow: `0 0 20px var(--${theme}-primary)`,
+                color: `hsl(var(--${theme}-primary))`,
+                animation: 'scale-pulse 2s infinite',
               }}
             >
               {result}
@@ -111,25 +115,34 @@ const ResultModal: React.FC<ResultModalProps> = ({
               <Button 
                 onClick={copyResult} 
                 variant="outline" 
-                className="bg-white/5 hover:bg-white/10 border-white/10"
-                size="sm"
+                className="bg-white/10 hover:bg-white/20 border-white/20 px-6 py-5 text-base"
+                size="lg"
               >
-                <Copy size={16} className="mr-2" />
+                <Copy size={18} className="mr-2" />
                 Copy
               </Button>
               
               <Button 
                 onClick={shareResult}
                 variant="outline"
-                className="bg-white/5 hover:bg-white/10 border-white/10"
-                size="sm"
+                className="bg-white/10 hover:bg-white/20 border-white/20 px-6 py-5 text-base"
+                size="lg"
               >
-                <Share2 size={16} className="mr-2" />
+                <Share2 size={18} className="mr-2" />
                 Share
               </Button>
             </div>
           </div>
         </div>
+        
+        {/* Pulsing glow effect */}
+        <div 
+          className="absolute inset-0 -z-10 rounded-xl opacity-50 animate-pulse-glow"
+          style={{ 
+            background: `radial-gradient(circle at center, var(--${theme}-primary) 0%, transparent 70%)`,
+            filter: 'blur(20px)'
+          }}
+        ></div>
       </div>
     </div>
   );

@@ -13,36 +13,41 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
   currentMood, 
   onMoodChange 
 }) => {
-  const moods: { id: Mood; name: string; icon: React.ReactNode; description: string }[] = [
+  const moods: { id: Mood; name: string; icon: React.ReactNode; description: string; gradient: string }[] = [
     {
       id: 'study',
       name: 'Study Mode',
       icon: <Book size={20} />,
-      description: 'Educational & focus themes'
+      description: 'Educational & focus themes',
+      gradient: 'from-[#0f4c81] to-[#87ceeb]'
     },
     {
       id: 'chill',
       name: 'Chill Mode',
       icon: <CloudMoon size={20} />,
-      description: 'Relaxation & entertainment'
+      description: 'Relaxation & entertainment',
+      gradient: 'from-[#a18cd1] to-[#fbc2eb]'
     },
     {
       id: 'party',
       name: 'Party Mode',
       icon: <PartyPopper size={20} />,
-      description: 'Celebration & activities'
+      description: 'Celebration & activities',
+      gradient: 'from-[#ff6f00] to-[#d50000]'
     },
     {
       id: 'gift',
       name: 'Gift Mode',
       icon: <Gift size={20} />,
-      description: 'Presents & surprises'
+      description: 'Presents & surprises',
+      gradient: 'from-[#f7b733] to-[#fc4a1a]'
     },
     {
       id: 'custom',
       name: 'Custom Mode',
       icon: <Settings size={20} />,
-      description: 'Your own entries'
+      description: 'Your own entries',
+      gradient: 'from-[#11998e] to-[#38ef7d]'
     }
   ];
 
@@ -64,9 +69,10 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
               className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${
                 currentMood === mood.id ? 'text-white' : 'text-white/70'
               }`}
-              style={{ backgroundColor: currentMood === mood.id 
-                ? `var(--${mood.id}-primary)` 
-                : 'rgba(255,255,255,0.1)' 
+              style={{ 
+                background: currentMood === mood.id 
+                  ? `linear-gradient(135deg, var(--${mood.id}-primary), var(--${mood.id}-secondary))` 
+                  : 'rgba(255,255,255,0.1)' 
               }}
             >
               {mood.icon}

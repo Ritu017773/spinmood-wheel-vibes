@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
+import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import SpinnerWheel from '@/components/SpinnerWheel';
@@ -130,6 +131,12 @@ const Index = () => {
 
   return (
     <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentMood}`}>
+      <Helmet>
+        <title>SpinMood - The Best Free Online Spinner Wheel for Giveaways, Study, Chill & Fun</title>
+        <meta name="description" content="Free online spinner wheel with customizable themes for giveaways, classrooms, study, parties & fun. Better than WheelofNames & PickerWheel." />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+      </Helmet>
+      
       <Header onStartClick={scrollToSpinner} />
       
       <main className="flex-1">
@@ -156,7 +163,7 @@ const Index = () => {
                       <p className="text-white/70 text-sm mb-4">
                         Choose from {getCurrentEntries().length} predefined options
                       </p>
-                      <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                      <div className="p-4 bg-white/5 backdrop-blur-md rounded-lg border border-white/10">
                         <div className="text-sm text-white/80">
                           Spin the wheel to randomly select from our curated list of {currentMood} options!
                         </div>
@@ -179,7 +186,7 @@ const Index = () => {
           </div>
         </div>
         
-        <div id="themes" className="py-16 bg-black/30">
+        <div id="themes" className="py-16 bg-black/30 backdrop-blur-md">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12 text-white">
               Personalize Your Experience
