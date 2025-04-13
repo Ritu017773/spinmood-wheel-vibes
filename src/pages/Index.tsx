@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet';
+import Providers from '@/components/Providers';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import SpinnerWheel from '@/components/SpinnerWheel';
@@ -34,7 +34,6 @@ const Index = () => {
     setCurrentResult(winner);
     setShowResultModal(true);
     
-    // Party theme has additional confetti effect
     if (currentMood === 'party') {
       createConfetti();
     }
@@ -82,7 +81,6 @@ const Index = () => {
     setCurrentMood(mood);
   };
 
-  // Get current entries based on the active mood
   const getCurrentEntries = () => {
     switch (currentMood) {
       case 'study':
@@ -100,7 +98,6 @@ const Index = () => {
     }
   };
   
-  // Add schema markup with JSON-LD
   useEffect(() => {
     const script = document.createElement('script');
     script.type = 'application/ld+json';
@@ -130,95 +127,97 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentMood}`}>
-      <Helmet>
-        <title>SpinMood - The Best Free Online Spinner Wheel for Giveaways, Study, Chill & Fun</title>
-        <meta name="description" content="Free online spinner wheel with customizable themes for giveaways, classrooms, study, parties & fun. Better than WheelofNames & PickerWheel." />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      </Helmet>
-      
-      <Header onStartClick={scrollToSpinner} />
-      
-      <main className="flex-1">
-        <Hero onStartClick={scrollToSpinner} />
+    <Providers>
+      <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentMood}`}>
+        <Helmet>
+          <title>SpinMood - The Best Free Online Spinner Wheel for Giveaways, Study, Chill & Fun</title>
+          <meta name="description" content="Free online spinner wheel with customizable themes for giveaways, classrooms, study, parties & fun. Better than WheelofNames & PickerWheel." />
+          <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        </Helmet>
         
-        <div 
-          ref={spinnerRef}
-          id="spinner" 
-          className={`py-16 theme-${currentMood} transition-all duration-500`}
-        >
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-8 text-white">
-              Your Custom Spinner Wheel
-            </h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
-              <div className="order-2 lg:order-1">
-                {currentMood === 'custom' ? (
-                  <EntryManager entries={customEntries} setEntries={setCustomEntries} />
-                ) : (
-                  <div className="w-full max-w-md mx-auto p-4 space-y-4">
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-white mb-3">{currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode</h3>
-                      <p className="text-white/70 text-sm mb-4">
-                        Choose from {getCurrentEntries().length} predefined options
-                      </p>
-                      <div className="p-4 bg-white/5 backdrop-blur-md rounded-lg border border-white/10">
-                        <div className="text-sm text-white/80">
-                          Spin the wheel to randomly select from our curated list of {currentMood} options!
+        <Header onStartClick={scrollToSpinner} />
+        
+        <main className="flex-1">
+          <Hero onStartClick={scrollToSpinner} />
+          
+          <div 
+            ref={spinnerRef}
+            id="spinner" 
+            className={`py-16 theme-${currentMood} transition-all duration-500`}
+          >
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-bold text-center mb-8 text-white">
+                Your Custom Spinner Wheel
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
+                <div className="order-2 lg:order-1">
+                  {currentMood === 'custom' ? (
+                    <EntryManager entries={customEntries} setEntries={setCustomEntries} />
+                  ) : (
+                    <div className="w-full max-w-md mx-auto p-4 space-y-4">
+                      <div className="text-center">
+                        <h3 className="text-lg font-medium text-white mb-3">{currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode</h3>
+                        <p className="text-white/70 text-sm mb-4">
+                          Choose from {getCurrentEntries().length} predefined options
+                        </p>
+                        <div className="p-4 bg-white/5 backdrop-blur-md rounded-lg border border-white/10">
+                          <div className="text-sm text-white/80">
+                            Spin the wheel to randomly select from our curated list of {currentMood} options!
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              <div className="order-1 lg:order-2 flex justify-center">
-                <SpinnerWheel 
-                  entries={getCurrentEntries()} 
-                  onSpinComplete={handleSpinComplete}
-                  theme={currentMood}
-                  soundEnabled={soundEnabled}
-                  isSpinning={isSpinning}
-                  setIsSpinning={setIsSpinning}
-                />
+                  )}
+                </div>
+                <div className="order-1 lg:order-2 flex justify-center">
+                  <SpinnerWheel 
+                    entries={getCurrentEntries()} 
+                    onSpinComplete={handleSpinComplete}
+                    theme={currentMood}
+                    soundEnabled={soundEnabled}
+                    isSpinning={isSpinning}
+                    setIsSpinning={setIsSpinning}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div id="themes" className="py-16 bg-black/30 backdrop-blur-md">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-white">
-              Personalize Your Experience
-            </h2>
-            
-            <MoodSelector 
-              currentMood={currentMood} 
-              onMoodChange={handleMoodChange} 
-            />
-            
-            <div className="mt-12 text-center">
-              <AudioToggle soundEnabled={soundEnabled} toggleSound={toggleSound} />
+          
+          <div id="themes" className="py-16 bg-black/30 backdrop-blur-md">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-bold text-center mb-12 text-white">
+                Personalize Your Experience
+              </h2>
+              
+              <MoodSelector 
+                currentMood={currentMood} 
+                onMoodChange={handleMoodChange} 
+              />
+              
+              <div className="mt-12 text-center">
+                <AudioToggle soundEnabled={soundEnabled} toggleSound={toggleSound} />
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div id="faq" className="py-16">
-          <div className="container mx-auto">
-            <FAQSection />
+          
+          <div id="faq" className="py-16">
+            <div className="container mx-auto">
+              <FAQSection />
+            </div>
           </div>
-        </div>
-      </main>
-      
-      <Footer />
-      
-      <ResultModal 
-        isOpen={showResultModal}
-        onClose={() => setShowResultModal(false)}
-        result={currentResult}
-        theme={currentMood}
-      />
-    </div>
+        </main>
+        
+        <Footer />
+        
+        <ResultModal 
+          isOpen={showResultModal}
+          onClose={() => setShowResultModal(false)}
+          result={currentResult}
+          theme={currentMood}
+        />
+      </div>
+    </Providers>
   );
 };
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import { FerrisWheel } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const Header = ({ onStartClick }: { onStartClick: () => void }) => {
   return (
@@ -12,12 +13,19 @@ const Header = ({ onStartClick }: { onStartClick: () => void }) => {
           SpinMood
         </span>
       </div>
-      <Button 
-        onClick={onStartClick}
-        className="bg-primary hover:bg-primary/90 text-primary-foreground"
-      >
-        Start Spinning
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button 
+            onClick={onStartClick}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            Start Spinning
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          Jump to the spinner section
+        </TooltipContent>
+      </Tooltip>
     </header>
   );
 };
