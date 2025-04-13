@@ -5,19 +5,24 @@ import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import SpinnerWheel from '@/components/SpinnerWheel';
 import EntryManager from '@/components/EntryManager';
-import ThemeSelector from '@/components/ThemeSelector';
+import MoodSelector from '@/components/MoodSelector';
 import AudioToggle from '@/components/AudioToggle';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
+import ResultModal from '@/components/ResultModal';
+import { studyOptions, chillOptions, partyOptions, giftOptions } from '@/data/spinnerOptions';
 
-type Theme = 'study' | 'chill' | 'party' | 'gift';
+type Mood = 'study' | 'chill' | 'party' | 'gift' | 'custom';
 
 const Index = () => {
-  const [entries, setEntries] = useState<string[]>([
+  const [customEntries, setCustomEntries] = useState<string[]>([
     "Pizza", "Burger", "Sushi", "Tacos", "Salad", "Pasta"
   ]);
-  const [currentTheme, setCurrentTheme] = useState<Theme>('study');
+  const [currentMood, setCurrentMood] = useState<Mood>('study');
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [currentResult, setCurrentResult] = useState<string | null>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
 
   const scrollToSpinner = () => {
@@ -25,12 +30,11 @@ const Index = () => {
   };
 
   const handleSpinComplete = (winner: string) => {
-    toast.success(`The winner is: ${winner}!`, {
-      duration: 5000,
-    });
+    setCurrentResult(winner);
+    setShowResultModal(true);
     
-    // Show confetti for party theme
-    if (currentTheme === 'party') {
+    // Party theme has additional confetti effect
+    if (currentMood === 'party') {
       createConfetti();
     }
   };
@@ -73,6 +77,28 @@ const Index = () => {
     }, 5000);
   };
   
+  const handleMoodChange = (mood: Mood) => {
+    setCurrentMood(mood);
+  };
+
+  // Get current entries based on the active mood
+  const getCurrentEntries = () => {
+    switch (currentMood) {
+      case 'study':
+        return studyOptions;
+      case 'chill':
+        return chillOptions;
+      case 'party':
+        return partyOptions;
+      case 'gift':
+        return giftOptions;
+      case 'custom':
+        return customEntries;
+      default:
+        return customEntries;
+    }
+  };
+  
   // Add schema markup with JSON-LD
   useEffect(() => {
     const script = document.createElement('script');
@@ -103,7 +129,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentTheme}`}>
+    <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentMood}`}>
       <Header onStartClick={scrollToSpinner} />
       
       <main className="flex-1">
@@ -112,7 +138,7 @@ const Index = () => {
         <div 
           ref={spinnerRef}
           id="spinner" 
-          className={`py-16 theme-${currentTheme} transition-all duration-500`}
+          className={`py-16 theme-${currentMood} transition-all duration-500`}
         >
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-8 text-white">
@@ -121,14 +147,32 @@ const Index = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
               <div className="order-2 lg:order-1">
-                <EntryManager entries={entries} setEntries={setEntries} />
+                {currentMood === 'custom' ? (
+                  <EntryManager entries={customEntries} setEntries={setCustomEntries} />
+                ) : (
+                  <div className="w-full max-w-md mx-auto p-4 space-y-4">
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-white mb-3">{currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode</h3>
+                      <p className="text-white/70 text-sm mb-4">
+                        Choose from {getCurrentEntries().length} predefined options
+                      </p>
+                      <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                        <div className="text-sm text-white/80">
+                          Spin the wheel to randomly select from our curated list of {currentMood} options!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="order-1 lg:order-2 flex justify-center">
                 <SpinnerWheel 
-                  entries={entries} 
+                  entries={getCurrentEntries()} 
                   onSpinComplete={handleSpinComplete}
-                  theme={currentTheme}
+                  theme={currentMood}
                   soundEnabled={soundEnabled}
+                  isSpinning={isSpinning}
+                  setIsSpinning={setIsSpinning}
                 />
               </div>
             </div>
@@ -141,9 +185,9 @@ const Index = () => {
               Personalize Your Experience
             </h2>
             
-            <ThemeSelector 
-              currentTheme={currentTheme} 
-              onThemeChange={setCurrentTheme} 
+            <MoodSelector 
+              currentMood={currentMood} 
+              onMoodChange={handleMoodChange} 
             />
             
             <div className="mt-12 text-center">
@@ -160,6 +204,13 @@ const Index = () => {
       </main>
       
       <Footer />
+      
+      <ResultModal 
+        isOpen={showResultModal}
+        onClose={() => setShowResultModal(false)}
+        result={currentResult}
+        theme={currentMood}
+      />
     </div>
   );
 };

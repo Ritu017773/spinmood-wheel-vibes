@@ -46,6 +46,10 @@
     
     --gift-primary: 40 80% 65%;
     --gift-secondary: 20 80% 55%;
+
+    /* Add custom theme colors */
+    --custom-primary: 200 70% 60%;
+    --custom-secondary: 210 60% 50%;
   }
 }
 
@@ -102,6 +106,10 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
+  .animate-bounce-once {
+    animation: bounce-once 0.5s ease-in-out;
+  }
 }
 
 /* Animation Keyframes */
@@ -152,6 +160,15 @@
   }
 }
 
+@keyframes bounce-once {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -186,4 +203,25 @@
   --wheel-primary: hsl(var(--gift-primary));
   --wheel-secondary: hsl(var(--gift-secondary));
   background: linear-gradient(135deg, rgba(152, 125, 59, 0.2), rgba(201, 174, 80, 0.1));
+}
+
+.theme-custom {
+  --wheel-primary: hsl(var(--custom-primary));
+  --wheel-secondary: hsl(var(--custom-secondary));
+  background: linear-gradient(135deg, rgba(59, 125, 152, 0.2), rgba(80, 150, 201, 0.1));
+}
+
+/* Add new sound files */
+@font-face {
+  font-family: 'SpinMood';
+  src: local('SpinMood');
+  font-display: swap;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

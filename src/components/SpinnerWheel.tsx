@@ -5,22 +5,26 @@ import { toast } from 'sonner';
 interface SpinnerWheelProps {
   entries: string[];
   onSpinComplete: (winner: string) => void;
-  theme: 'study' | 'chill' | 'party' | 'gift';
+  theme: 'study' | 'chill' | 'party' | 'gift' | 'custom';
   soundEnabled: boolean;
+  isSpinning: boolean;
+  setIsSpinning: (isSpinning: boolean) => void;
 }
 
 const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   entries,
   onSpinComplete,
   theme,
-  soundEnabled
+  soundEnabled,
+  isSpinning,
+  setIsSpinning
 }) => {
-  const [isSpinning, setIsSpinning] = useState(false);
   const [rotationDeg, setRotationDeg] = useState(0);
   const [winner, setWinner] = useState<string | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
   const spinSoundRef = useRef<HTMLAudioElement | null>(null);
   const resultSoundRef = useRef<HTMLAudioElement | null>(null);
+  const idleAnimationRef = useRef<number | null>(null);
   
   useEffect(() => {
     spinSoundRef.current = new Audio('/sounds/spin.mp3');
@@ -35,8 +39,44 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         resultSoundRef.current.pause();
         resultSoundRef.current = null;
       }
+      if (idleAnimationRef.current) {
+        cancelAnimationFrame(idleAnimationRef.current);
+      }
     };
   }, []);
+
+  // Idle animation effect
+  useEffect(() => {
+    if (isSpinning || entries.length < 2) return;
+    
+    let idleAngle = 0;
+    let direction = 1;
+    let speed = 0.05;
+    
+    const animateIdle = () => {
+      if (isSpinning) return;
+      
+      idleAngle += speed * direction;
+      
+      // Gentle back and forth motion
+      if (idleAngle > 3) direction = -1;
+      if (idleAngle < -3) direction = 1;
+      
+      if (wheelRef.current) {
+        wheelRef.current.style.transform = `rotate(${rotationDeg + idleAngle}deg)`;
+      }
+      
+      idleAnimationRef.current = requestAnimationFrame(animateIdle);
+    };
+    
+    idleAnimationRef.current = requestAnimationFrame(animateIdle);
+    
+    return () => {
+      if (idleAnimationRef.current) {
+        cancelAnimationFrame(idleAnimationRef.current);
+      }
+    };
+  }, [isSpinning, entries.length, rotationDeg]);
 
   const handleSpin = () => {
     if (isSpinning || entries.length < 2) return;
@@ -48,6 +88,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     
     setIsSpinning(true);
     setWinner(null);
+
+    // Cancel any idle animation
+    if (idleAnimationRef.current) {
+      cancelAnimationFrame(idleAnimationRef.current);
+    }
 
     // Play spin sound
     if (soundEnabled && spinSoundRef.current) {
@@ -124,8 +169,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         </div>
         
         {/* Center spindle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg z-10 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full bg-gray-800"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg z-10 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-gray-800"></div>
         </div>
         
         {/* Pointer */}
@@ -137,20 +182,13 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       <button
         onClick={handleSpin}
         disabled={isSpinning || entries.length < 2}
-        className={`mt-8 px-8 py-3 bg-primary text-white rounded-full font-semibold 
+        className={`mt-8 px-8 py-4 bg-primary text-white rounded-full font-bold text-lg
                   transform transition-all duration-300 ${
-                    isSpinning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
+                    isSpinning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 hover:shadow-lg hover:shadow-primary/30'
                   }`}
       >
         {isSpinning ? 'Spinning...' : 'SPIN'}
       </button>
-
-      {winner && (
-        <div className="mt-6 text-center animate-fade-in">
-          <div className="text-lg text-white/80">Result:</div>
-          <div className="text-2xl font-bold text-white">{winner}</div>
-        </div>
-      )}
     </div>
   );
 };
