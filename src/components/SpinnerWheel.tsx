@@ -130,7 +130,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     
     setRotationDeg(newRotationDeg);
     
-    // Calculate the winner
+    // Calculate the winner with adjusted timing for sound (5000ms to match the animation duration)
     setTimeout(() => {
       // Remove blur effect with slight delay for smooth transition
       if (wheelRef.current) {
@@ -147,7 +147,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
-      // FIXED: Play result sound only after wheel completely stops
+      // FIXED: Only play result sound after wheel completely stops
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
@@ -183,6 +183,36 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     }
   };
 
+  // Generate unique colors for each segment based on index
+  const getSegmentColor = (index: number, isEven: boolean) => {
+    // Base colors for each theme
+    const themeColors = {
+      study: ['#4a6fa5', '#6698c8'],
+      chill: ['#c084fc', '#f9a8d4'],
+      party: ['#f97316', '#ef4444'],
+      gift: ['#f59e0b', '#d97706'],
+      custom: ['#10b981', '#059669']
+    };
+    
+    // Select base colors based on theme
+    const baseColors = themeColors[theme] || themeColors.custom;
+    
+    // Create variation based on index for larger numbers of entries
+    if (entries.length > 10) {
+      // For more entries, generate distinct colors
+      const hue = (index * (360 / entries.length)) % 360;
+      const saturation = isEven ? '85%' : '70%';
+      const lightness = isEven ? '55%' : '65%';
+      return `hsl(${hue}, ${saturation}, ${lightness})`;
+    } else {
+      // For fewer entries, use theme colors with variations
+      const baseColor = isEven ? baseColors[0] : baseColors[1];
+      // Add subtle variations to make adjacent segments more distinct
+      const variation = index * 8;
+      return baseColor;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="relative" style={{ width: getWheelSize(), height: getWheelSize() }}>
@@ -201,10 +231,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
             const rotation = index * sliceSizeDegrees;
             const skew = 90 - sliceSizeDegrees;
             
-            // Alternate colors based on theme
-            const baseColor = index % 2 === 0 ? 
-              `var(--wheel-primary)` : 
-              `var(--wheel-secondary)`;
+            // Get unique color for each segment
+            const segmentColor = getSegmentColor(index, index % 2 === 0);
             
             const isHighlighted = index === hoverSlice;
             
@@ -215,7 +243,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
                           transition-opacity duration-300`}
                 style={{
                   transform: `rotate(${rotation}deg) skew(${skew}deg)`,
-                  background: baseColor,
+                  background: segmentColor,
                   opacity: isHighlighted ? 0.8 : 1,
                   boxShadow: isHighlighted ? 'inset 0 0 15px rgba(255,255,255,0.3)' : 'none'
                 }}
@@ -250,14 +278,16 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           }}
         ></div>
         
-        {/* Enhanced center spindle with more elaborate design */}
+        {/* Enhanced center spindle with more elaborate design - now clickable */}
         <div 
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 
                    rounded-full bg-gradient-to-br from-white/90 to-white/60 shadow-lg z-10 
-                   flex items-center justify-center"
+                   flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           style={{
             boxShadow: `0 0 15px var(--${theme}-primary, rgba(255,255,255,0.5))`,
           }}
+          onClick={handleSpin}
+          aria-label="Spin the wheel"
         >
           <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center">
             <div 

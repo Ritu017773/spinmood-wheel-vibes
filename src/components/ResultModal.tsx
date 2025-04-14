@@ -27,10 +27,10 @@ const ResultModal: React.FC<ResultModalProps> = ({
         setAnimation('entered');
       }, 300);
 
-      // FIXED: Extended auto-close timer from 2 to 6 seconds
+      // EXTENDED: Auto-close timer to 6 seconds
       const autoCloseTimer = setTimeout(() => {
         handleClose();
-      }, 6000); // Auto close after 6 seconds (extended from 2s)
+      }, 6000); // Auto close after 6 seconds
 
       return () => {
         clearTimeout(enterTimer);

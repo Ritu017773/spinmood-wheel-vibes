@@ -6,21 +6,21 @@ import { Button } from '@/components/ui/button';
 const Hero = ({ onStartClick }: { onStartClick: () => void }) => {
   return (
     <section className="w-full min-h-[90vh] flex flex-col items-center justify-center relative particle-bg particle-floating py-16 px-4 sm:px-6">
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-background to-background z-0"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-background to-background z-0"></div>
       
-      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6">
+      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
         <div className="mb-8 flex justify-center">
           <FerrisWheel className="h-24 w-24 text-primary animate-spin-slow glow-strong animate-glow-pulse" />
         </div>
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          <span className="block mb-2">SpinMood ⭐</span>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+          <span className="block mb-2">SpinMood</span>
           <span className="bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent">
             The <span className="font-black">Best Free</span> Online Spinner Wheel
           </span>
         </h1>
         
-        <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto font-medium">
           Make <span className="font-bold text-white">Every Decision Fun & Easy</span>. SpinMood is 
           <span className="font-bold text-white"> lightning-fast</span>, 
           <span className="font-bold text-white"> sound-enabled</span>, 
@@ -37,11 +37,11 @@ const Hero = ({ onStartClick }: { onStartClick: () => void }) => {
           </Button>
         </div>
         
-        <div className="pt-8 text-sm text-white/70 flex flex-wrap justify-center gap-4 font-medium">
-          <span className="flex items-center"><span className="h-1.5 w-1.5 rounded-full bg-primary mr-2 glow"></span> Giveaways</span>
-          <span className="flex items-center"><span className="h-1.5 w-1.5 rounded-full bg-study-primary mr-2 glow"></span> Study</span>
-          <span className="flex items-center"><span className="h-1.5 w-1.5 rounded-full bg-chill-primary mr-2 glow"></span> Chill</span>
-          <span className="flex items-center"><span className="h-1.5 w-1.5 rounded-full bg-party-primary mr-2 glow"></span> Fun</span>
+        <div className="pt-8 text-base text-white/80 flex flex-wrap justify-center gap-4 font-semibold">
+          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-primary mr-2 glow"></span> Giveaways</span>
+          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-study-primary mr-2 glow"></span> Study</span>
+          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-chill-primary mr-2 glow"></span> Chill</span>
+          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-party-primary mr-2 glow"></span> Fun</span>
         </div>
       </div>
     </section>
