@@ -18,7 +18,7 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    // Set canvas dimensions
+    // Set canvas dimensions to cover full screen
     const setCanvasDimensions = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -53,7 +53,8 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
     
     // Create confetti particles with enhanced variety
     const createConfetti = () => {
-      const particleCount = 150; // More particles
+      // IMPROVED: Increased particle count for more celebratory feel
+      const particleCount = 250; // More particles (from 150)
       for (let i = 0; i < particleCount; i++) {
         const shape = shapes[Math.floor(Math.random() * shapes.length)];
         confettiRef.current.push({
@@ -113,8 +114,8 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Continue creating particles in waves
-      if (confettiRef.current.length < 300 && Math.random() > 0.95) {
+      // Continue creating particles in waves for more dynamic effect
+      if (confettiRef.current.length < 400 && Math.random() > 0.95) {
         createConfetti();
       }
       
@@ -224,8 +225,17 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
       animationFrameRef.current = requestAnimationFrame(animate);
     };
     
+    // Create initial batch of particles
     createConfetti();
     animate();
+    
+    // Cleanup after animation duration (improved: longer celebration)
+    const cleanup = setTimeout(() => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      confettiRef.current = [];
+    }, 5000); // Increased duration from ~3s to 5s
     
     // Cleanup
     return () => {
@@ -233,6 +243,7 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      clearTimeout(cleanup);
       confettiRef.current = [];
     };
   }, [isActive, theme]);
@@ -240,8 +251,17 @@ const Confetti: React.FC<ConfettiProps> = ({ isActive, theme }) => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute inset-0 z-0 pointer-events-none"
+      className="fixed inset-0 z-0 pointer-events-none"
       aria-hidden="true"
+      style={{
+        // IMPROVED: Set fixed position to cover entire screen
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999
+      }}
     />
   );
 };

@@ -27,9 +27,10 @@ const ResultModal: React.FC<ResultModalProps> = ({
         setAnimation('entered');
       }, 300);
 
+      // FIXED: Extended auto-close timer from 2 to 6 seconds
       const autoCloseTimer = setTimeout(() => {
         handleClose();
-      }, 2000); // Auto close after 2 seconds
+      }, 6000); // Auto close after 6 seconds (extended from 2s)
 
       return () => {
         clearTimeout(enterTimer);
@@ -87,6 +88,7 @@ const ResultModal: React.FC<ResultModalProps> = ({
           boxShadow: `0 0 50px var(--${theme}-primary), 0 0 100px rgba(0,0,0,0.5)`,
         }}
       >
+        {/* Enhanced confetti effect - more particles and longer duration */}
         <Confetti isActive={animation === 'entering' || animation === 'entered'} theme={theme} />
         
         <button
@@ -101,7 +103,7 @@ const ResultModal: React.FC<ResultModalProps> = ({
           <div className="text-center">
             <h3 className="text-xl font-medium text-white/80 mb-6">Your Result</h3>
             <div 
-              className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white animate-bounce-once`}
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white animate-bounce-once"
               style={{ 
                 textShadow: `0 0 20px var(--${theme}-primary)`,
                 color: `hsl(var(--${theme}-primary))`,
@@ -135,7 +137,7 @@ const ResultModal: React.FC<ResultModalProps> = ({
           </div>
         </div>
         
-        {/* Pulsing glow effect */}
+        {/* Enhanced pulsing glow effect */}
         <div 
           className="absolute inset-0 -z-10 rounded-xl opacity-50 animate-pulse-glow"
           style={{ 

@@ -147,7 +147,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
-      // Play result sound
+      // FIXED: Play result sound only after wheel completely stops
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
@@ -157,6 +157,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       setScale(1.08);
       setTimeout(() => setScale(1), 200);
       
+      // FIXED: Only call the onSpinComplete after wheel is fully stopped
       onSpinComplete(actualWinner);
       setIsSpinning(false);
     }, 5000); // Match this to the CSS animation duration
@@ -223,10 +224,14 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
               >
                 <div 
                   className="absolute -left-1 bottom-0 w-[200%] text-center rotate-[55deg] 
-                           text-sm md:text-base font-medium truncate px-8 pt-8"
-                  style={{ transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)` }}
+                           text-sm md:text-base font-bold truncate px-8 pt-8"
+                  style={{ 
+                    transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)`,
+                    // IMPROVED: Make text more visible with text shadow
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.7)'
+                  }}
                 >
-                  <span className="font-bold">{entry}</span>
+                  {entry}
                 </div>
               </div>
             );

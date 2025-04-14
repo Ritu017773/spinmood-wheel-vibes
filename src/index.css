@@ -1,11 +1,13 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 222 19% 14%;
-    --foreground: 210 40% 98%;
+    /* Keeping original variables for consistency, though background is overridden */
+    --background: 222 19% 14%; /* Fallback, won't be visible due to gradient */
+    --foreground: 210 40% 98%; /* Text color still relevant */
 
     --card: 224 20% 16%;
     --card-foreground: 210 40% 98%;
@@ -13,6 +15,7 @@
     --popover: 224 20% 16%;
     --popover-foreground: 210 40% 98%;
 
+    /* Primary might be used for buttons etc, adjust if needed */
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
@@ -33,23 +36,43 @@
     --ring: 224.3 76.3% 48%;
     --radius: 0.75rem;
 
-    /* Theme Colors - Study (Blue) */
+    /* --- NEW: Variables for our gradient colors --- */
+    /* Default/Custom Theme (Teal to Blue) */
+    --default-gradient-start: #008080; /* Teal */
+    --default-gradient-end: #87CEEB; /* Sky Blue */
+
+    /* Study Theme (Navy to Light Cyan) */
+    --study-gradient-start: #000080; /* Navy Blue */
+    --study-gradient-end: #AFEEEE; /* Light Cyan */
+
+    /* Chill Theme (Lavender to Mint) */
+    --chill-gradient-start: #E6E6FA; /* Lavender */
+    --chill-gradient-mid: #B0E0E6; /* Pastel Sky Blue */
+    --chill-gradient-end: #98FF98; /* Mint Green */
+
+    /* Party Theme (Pink to Yellow to Cyan) */
+    --party-gradient-start: #FF007F; /* Electric Pink */
+    --party-gradient-mid: #FFD700; /* Golden Yellow */
+    --party-gradient-end: #00FFFF; /* Cyan Blue */
+
+    /* Gift Theme (Orange to Gold to Burgundy) */
+    --gift-gradient-start: #FFA500; /* Warm Orange */
+    --gift-gradient-mid: #FFD700; /* Gold */
+    --gift-gradient-end: #800020; /* Burgundy Red */
+
+    /* Custom Theme (Same as Default for now, or define differently) */
+    --custom-gradient-start: var(--default-gradient-start);
+    --custom-gradient-end: var(--default-gradient-end);
+
+    /* Wheel colors (keeping original) */
     --study-primary: 215 70% 60%;
     --study-secondary: 200 70% 65%;
-    
-    /* Theme Colors - Chill (Purple/Pink) */
     --chill-primary: 280 60% 70%;
     --chill-secondary: 320 70% 85%;
-    
-    /* Theme Colors - Party (Orange/Red) */
     --party-primary: 25 100% 60%;
     --party-secondary: 0 90% 50%;
-    
-    /* Theme Colors - Gift (Yellow/Orange) */
     --gift-primary: 40 90% 60%;
     --gift-secondary: 20 90% 55%;
-
-    /* Theme Colors - Custom (Green) */
     --custom-primary: 160 80% 40%;
     --custom-secondary: 140 70% 50%;
   }
@@ -59,7 +82,7 @@
   * {
     @apply border-border;
   }
-  
+
   html {
     @apply scroll-smooth overflow-x-hidden;
     scroll-behavior: smooth;
@@ -67,12 +90,20 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased min-h-screen w-screen overflow-x-hidden;
-    background-image: radial-gradient(
-      circle at 50% 50%,
-      rgba(52, 60, 80, 0.2) 0%,
-      rgba(26, 31, 44, 0.2) 100%
+    /* @apply bg-background; */ /* REMOVED default dark background color */
+    @apply text-foreground font-sans antialiased min-h-screen w-screen overflow-x-hidden;
+
+    /* --- ADDED: Default Gradient Background --- */
+    background-image: linear-gradient(
+      to bottom, /* Vertical gradient */
+      var(--default-gradient-start),
+      var(--default-gradient-end)
     );
+    background-size: cover; /* Ensure gradient covers the whole page */
+    background-attachment: fixed; /* Keep gradient fixed during scroll */
+    background-repeat: no-repeat; /* Prevent gradient repeating */
+
+    /* REMOVED the radial-gradient overlay */
   }
 }
 
@@ -299,34 +330,46 @@
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
+/* --- UPDATED Theme Classes with New Backgrounds --- */
+
 .theme-study {
   --wheel-primary: hsl(var(--study-primary));
   --wheel-secondary: hsl(var(--study-secondary));
-  background: linear-gradient(135deg, rgba(15, 76, 129, 0.9), rgba(135, 206, 235, 0.6));
+  /* Overrides body background */
+  background: linear-gradient(to bottom, var(--study-gradient-start), var(--study-gradient-end)) fixed;
+  background-size: cover;
 }
 
 .theme-chill {
   --wheel-primary: hsl(var(--chill-primary));
   --wheel-secondary: hsl(var(--chill-secondary));
-  background: linear-gradient(135deg, rgba(161, 140, 209, 0.9), rgba(251, 194, 235, 0.6));
+  /* Overrides body background */
+  background: linear-gradient(to bottom, var(--chill-gradient-start), var(--chill-gradient-mid), var(--chill-gradient-end)) fixed;
+  background-size: cover;
 }
 
 .theme-party {
   --wheel-primary: hsl(var(--party-primary));
   --wheel-secondary: hsl(var(--party-secondary));
-  background: linear-gradient(135deg, rgba(255, 111, 0, 0.9), rgba(213, 0, 0, 0.6));
+  /* Overrides body background */
+  background: linear-gradient(to bottom, var(--party-gradient-start), var(--party-gradient-mid), var(--party-gradient-end)) fixed;
+  background-size: cover;
 }
 
 .theme-gift {
   --wheel-primary: hsl(var(--gift-primary));
   --wheel-secondary: hsl(var(--gift-secondary));
-  background: linear-gradient(135deg, rgba(247, 183, 51, 0.9), rgba(252, 74, 26, 0.6));
+  /* Overrides body background */
+  background: linear-gradient(to bottom, var(--gift-gradient-start), var(--gift-gradient-mid), var(--gift-gradient-end)) fixed;
+  background-size: cover;
 }
 
 .theme-custom {
   --wheel-primary: hsl(var(--custom-primary));
   --wheel-secondary: hsl(var(--custom-secondary));
-  background: linear-gradient(135deg, rgba(17, 153, 142, 0.9), rgba(56, 239, 125, 0.6));
+  /* Overrides body background */
+  background: linear-gradient(to bottom, var(--custom-gradient-start), var(--custom-gradient-end)) fixed;
+  background-size: cover;
 }
 
 @media (max-width: 640px) {

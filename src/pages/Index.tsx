@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet';
@@ -45,7 +46,7 @@ const Index = () => {
   };
   
   const createConfetti = () => {
-    const confettiCount = 100;
+    const confettiCount = 150; // Increased from 100 for more celebration
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.top = '0';
@@ -56,25 +57,32 @@ const Index = () => {
     container.style.zIndex = '9999';
     document.body.appendChild(container);
     
+    // More vibrant colors for party mode
+    const colors = [
+      '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', 
+      '#536DFE', '#448AFF', '#40C4FF', '#18FFFF',
+      '#FFD700', '#FF6347', '#00FF7F', '#FF1493'
+    ];
+    
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div');
       confetti.style.position = 'absolute';
-      confetti.style.width = `${Math.random() * 10 + 5}px`;
-      confetti.style.height = `${Math.random() * 10 + 5}px`;
-      confetti.style.backgroundColor = [
-        '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', 
-        '#536DFE', '#448AFF', '#40C4FF', '#18FFFF'
-      ][Math.floor(Math.random() * 8)];
-      confetti.style.borderRadius = '50%';
+      confetti.style.width = `${Math.random() * 15 + 5}px`; // Larger size
+      confetti.style.height = `${Math.random() * 15 + 5}px`;
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0'; // Mix of circles and squares
       confetti.style.opacity = '0.8';
       confetti.style.left = `${Math.random() * 100}%`;
-      confetti.style.animation = `confetti ${Math.random() * 2 + 2}s ease-out forwards`;
+      // Start higher up for a more dramatic effect
+      confetti.style.top = `${Math.random() * -30}%`;
+      // Longer animation duration for prolonged effect
+      confetti.style.animation = `confetti ${Math.random() * 3 + 3}s ease-out forwards`;
       container.appendChild(confetti);
     }
     
     setTimeout(() => {
       document.body.removeChild(container);
-    }, 5000);
+    }, 6000); // Extended from 5s to 6s to match result display time
   };
   
   const handleMoodChange = (mood: Mood) => {
@@ -97,6 +105,16 @@ const Index = () => {
         return customEntries;
     }
   };
+  
+  useEffect(() => {
+    // Apply theme class to document body
+    document.body.className = `theme-${currentMood}`;
+    
+    // Return cleanup function
+    return () => {
+      document.body.className = '';
+    };
+  }, [currentMood]);
   
   useEffect(() => {
     const script = document.createElement('script');
@@ -128,7 +146,8 @@ const Index = () => {
 
   return (
     <Providers>
-      <div className={`min-h-screen flex flex-col bg-background text-foreground theme-${currentMood}`}>
+      {/* Removed theme class from this div since it's now on body */}
+      <div className="min-h-screen flex flex-col text-foreground">
         <Helmet>
           <title>SpinMood - The Best Free Online Spinner Wheel for Giveaways, Study, Chill & Fun</title>
           <meta name="description" content="Free online spinner wheel with customizable themes for giveaways, classrooms, study, parties & fun. Better than WheelofNames & PickerWheel." />
@@ -143,7 +162,7 @@ const Index = () => {
           <div 
             ref={spinnerRef}
             id="spinner" 
-            className={`py-16 theme-${currentMood} transition-all duration-500`}
+            className="py-16 transition-all duration-500"
           >
             <div className="container mx-auto px-4">
               <h2 className="text-3xl font-bold text-center mb-8 text-white">
@@ -159,10 +178,10 @@ const Index = () => {
                       <div className="text-center">
                         <h3 className="text-lg font-medium text-white mb-3">{currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode</h3>
                         <p className="text-white/70 text-sm mb-4">
-                          Choose from {getCurrentEntries().length} predefined options
+                          Choose from <span className="font-bold">{getCurrentEntries().length}</span> predefined options
                         </p>
                         <div className="p-4 bg-white/5 backdrop-blur-md rounded-lg border border-white/10">
-                          <div className="text-sm text-white/80">
+                          <div className="text-sm font-medium text-white/80">
                             Spin the wheel to randomly select from our curated list of {currentMood} options!
                           </div>
                         </div>
