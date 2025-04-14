@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import Confetti from '@/components/Confetti';
@@ -30,7 +29,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   const [scale, setScale] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
   
-  // Initialize audio with direct URLs
   useEffect(() => {
     spinSoundRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
     resultSoundRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
@@ -50,20 +48,18 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     };
   }, []);
 
-  // Idle animation effect - more fluid and bouncy
   useEffect(() => {
     if (isSpinning || entries.length < 2) return;
     
     let idleAngle = 0;
     let direction = 1;
-    let speed = 0.05; // Slightly faster for more noticeable movement
+    let speed = 0.05;
     
     const animateIdle = () => {
       if (isSpinning) return;
       
       idleAngle += speed * direction;
       
-      // More pronounced back and forth motion
       if (idleAngle > 4) direction = -1;
       if (idleAngle < -4) direction = 1;
       
@@ -95,47 +91,36 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     setWinner(null);
     setShowCelebration(false);
     
-    // Enhanced animation sequence
-    // Initial anticipation - slight pullback
     setScale(0.98);
     setTimeout(() => {
-      // Then quick scale up for emphasis
       setScale(1.05);
       setTimeout(() => setScale(1), 200);
     }, 150);
 
-    // Cancel any idle animation
     if (idleAnimationRef.current) {
       cancelAnimationFrame(idleAnimationRef.current);
     }
 
-    // Play spin sound with fallback
     if (soundEnabled && spinSoundRef.current) {
       spinSoundRef.current.currentTime = 0;
       spinSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
     }
     
-    // Calculate the spin with variable speed profile for more natural motion
-    const minSpins = 6; // Increased minimum spins
-    const maxSpins = 12; // Increased maximum spins
+    const minSpins = 6;
+    const maxSpins = 12;
     const spinCount = minSpins + Math.random() * (maxSpins - minSpins);
     const spinDegrees = spinCount * 360 + Math.random() * 360;
     const newRotationDeg = rotationDeg + spinDegrees;
     
-    // Apply motion blur during fast spin for premium feel
     if (wheelRef.current) {
       wheelRef.current.style.filter = 'blur(2px)';
-      
-      // Premium wheel spin animation with easing
       wheelRef.current.style.transition = 'transform 5s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
       wheelRef.current.style.transform = `rotate(${newRotationDeg}deg)`;
     }
     
     setRotationDeg(newRotationDeg);
     
-    // Calculate the winner with adjusted timing for sound (5000ms to match the animation duration)
     setTimeout(() => {
-      // Remove blur effect with slight delay for smooth transition
       if (wheelRef.current) {
         wheelRef.current.style.filter = 'blur(0.5px)';
         setTimeout(() => {
@@ -150,45 +135,37 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
-      // Play result sound AFTER wheel completely stops
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
       }
       
-      // Show celebration effect
       setShowCelebration(true);
       
-      // Small bounce effect when result is shown
       setScale(1.08);
       setTimeout(() => setScale(1), 200);
       
-      // Call the onSpinComplete after wheel is fully stopped
-      // Delay displaying the winner for a better user experience - 5-6 seconds as requested
       setTimeout(() => {
         onSpinComplete(actualWinner);
         setIsSpinning(false);
         
-        // Hide celebration effect after a few seconds
         setTimeout(() => {
           setShowCelebration(false);
         }, 3000);
-      }, 1000); // Additional 1 second delay after animation completes
-      
-    }, 5000); // Match this to the CSS animation duration
+      }, 1000);
+    }, 5000);
   };
 
-  // Calculate dynamic size based on container
   const getWheelSize = () => {
     if (typeof window === 'undefined') return '100%';
     const viewWidth = window.innerWidth;
     
     if (viewWidth < 640) {
-      return '90vw'; // Almost full width on mobile
+      return '90vw';
     } else if (viewWidth < 1024) {
-      return '70vw'; // Larger on tablets
+      return '70vw';
     } else {
-      return 'min(65vh, 600px)'; // Even larger on desktop, but capped
+      return 'min(65vh, 600px)';
     }
   };
 
@@ -198,9 +175,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     }
   };
 
-  // Generate unique colors for each segment based on index
   const getSegmentColor = (index: number, isEven: boolean) => {
-    // Define a broader spectrum of distinct colors for better visibility with many entries
     const colorWheel = [
       '#FF5252', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
       '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50',
@@ -213,24 +188,20 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       '#33691E', '#F57F17', '#FF6F00', '#E65100', '#BF360C'
     ];
     
-    // For very large number of entries (>40), generate colors mathematically
     if (entries.length > 40) {
-      // Generate evenly distributed hues around the color wheel
       const hue = (index * (360 / entries.length)) % 360;
-      const saturation = 70 + (index % 3) * 10; // Vary saturation slightly for adjacent segments
-      const lightness = 45 + (index % 5) * 5; // Vary lightness slightly for better distinction
+      const saturation = 70 + (index % 3) * 10;
+      const lightness = 45 + (index % 5) * 5;
       return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     } 
     
-    // For entry counts up to 40, use our predefined color wheel
-    // Apply slight variations to make adjacent segments more distinguishable
     const baseColorIndex = index % colorWheel.length;
     return colorWheel[baseColorIndex];
   };
 
   return (
     <div className="flex flex-col items-center justify-center p-4 relative">
-      {showCelebration && <Confetti />}
+      <Confetti isActive={showCelebration} theme={theme} />
       
       <div className="relative" style={{ width: getWheelSize(), height: getWheelSize() }}>
         <div 
@@ -248,13 +219,10 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
             const rotation = index * sliceSizeDegrees;
             const skew = 90 - sliceSizeDegrees;
             
-            // Get unique color for each segment
             const segmentColor = getSegmentColor(index, index % 2 === 0);
             
             const isHighlighted = index === hoverSlice;
             
-            // Calculate font size based on number of entries
-            // More entries = smaller font
             let fontSize = '1rem';
             if (entries.length > 30) {
               fontSize = '0.75rem';
@@ -284,8 +252,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
                   style={{ 
                     transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)`,
                     fontSize: fontSize,
-                    fontWeight: 700, // Bolder text
-                    // Improved text visibility with stronger text shadow
+                    fontWeight: 700,
                     textShadow: '1px 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.7)'
                   }}
                 >
@@ -295,12 +262,10 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
             );
           })}
 
-          {/* Enhanced light reflections for premium feel */}
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none rounded-full"></div>
         </div>
         
-        {/* Enhanced glow effect around the wheel */}
         <div 
           className="absolute -inset-4 rounded-full opacity-30 blur-xl z-0 animate-pulse-slow pointer-events-none"
           style={{ 
@@ -308,7 +273,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           }}
         ></div>
         
-        {/* Enhanced center spindle with more elaborate design - clickable */}
         <div 
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 
                    rounded-full bg-gradient-to-br from-white/90 to-white/60 shadow-lg z-10 
@@ -329,7 +293,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           </div>
         </div>
         
-        {/* Enhanced pointer with shadow and glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4 w-8 h-8 z-10">
           <div 
             className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] 
