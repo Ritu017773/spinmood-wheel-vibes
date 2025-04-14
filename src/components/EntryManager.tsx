@@ -15,6 +15,9 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
   const [newEntry, setNewEntry] = useState('');
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkEntries, setBulkEntries] = useState('');
+  
+  // Maximum number of entries allowed (increased to 40 as requested)
+  const MAX_ENTRIES = 40;
 
   const addEntry = () => {
     if (!newEntry.trim()) {
@@ -24,6 +27,11 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
     
     if (entries.includes(newEntry.trim())) {
       toast.error("Entry already exists");
+      return;
+    }
+    
+    if (entries.length >= MAX_ENTRIES) {
+      toast.error(`Maximum ${MAX_ENTRIES} entries allowed`);
       return;
     }
     
@@ -46,6 +54,12 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
     
     if (newEntries.length === 0) {
       toast.error("No valid entries found");
+      return;
+    }
+    
+    // Check if adding these entries would exceed the limit
+    if (entries.length + newEntries.length > MAX_ENTRIES) {
+      toast.error(`Cannot add ${newEntries.length} entries. Maximum ${MAX_ENTRIES} entries allowed (${MAX_ENTRIES - entries.length} remaining)`);
       return;
     }
     
@@ -177,7 +191,9 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
       </div>
 
       <div className="mt-4 space-y-1">
-        <h3 className="text-sm font-medium text-white/70 mb-2">Current Entries ({entries.length})</h3>
+        <h3 className="text-sm font-medium text-white/70 mb-2">
+          Current Entries ({entries.length}/{MAX_ENTRIES})
+        </h3>
         
         {entries.length === 0 && (
           <p className="text-sm text-white/50 text-center py-4">
@@ -185,7 +201,7 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
           </p>
         )}
         
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto">
           {entries.map((entry, index) => (
             <div 
               key={index}
