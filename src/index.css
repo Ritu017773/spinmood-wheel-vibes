@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -38,27 +37,27 @@
 
     /* --- UPDATED: Softer gradient colors --- */
     /* Default/Custom Theme (Softer Teal to Blue) */
-    --default-gradient-start: #2a9d8f; /* Softer Teal */
-    --default-gradient-end: #a8dadc; /* Softer Sky Blue */
+    --default-gradient-start: #a8dfec; /* Softer Sky Blue */
+    --default-gradient-end: #e3f5fa; /* Even Softer Sky Blue */
 
     /* Study Theme (Softer Navy to Light Cyan) */
-    --study-gradient-start: #1d3557; /* Softer Navy Blue */
-    --study-gradient-end: #caf0f8; /* Softer Light Cyan */
+    --study-gradient-start: #6c91c2; /* Softer Navy Blue */
+    --study-gradient-end: #d5e5f2; /* Softer Light Cyan */
 
     /* Chill Theme (Softer Lavender to Mint) */
     --chill-gradient-start: #e9ecf5; /* Softer Lavender */
-    --chill-gradient-mid: #cce3eb; /* Softer Pastel Sky Blue */
-    --chill-gradient-end: #c7f9cc; /* Softer Mint Green */
+    --chill-gradient-mid: #e0eef3; /* Softer Pastel Sky Blue */
+    --chill-gradient-end: #e0f5e3; /* Softer Mint Green */
 
     /* Party Theme (Softer Pink to Yellow to Cyan) */
-    --party-gradient-start: #ff758f; /* Softer Electric Pink */
-    --party-gradient-mid: #ffdf8c; /* Softer Golden Yellow */
-    --party-gradient-end: #8cffff; /* Softer Cyan Blue */
+    --party-gradient-start: #ffb3c6; /* Softer Electric Pink */
+    --party-gradient-mid: #ffebb3; /* Softer Golden Yellow */
+    --party-gradient-end: #c6eef2; /* Softer Cyan Blue */
 
     /* Gift Theme (Softer Orange to Gold to Burgundy) */
-    --gift-gradient-start: #f9bc8f; /* Softer Warm Orange */
-    --gift-gradient-mid: #f8e9b7; /* Softer Gold */
-    --gift-gradient-end: #a15766; /* Softer Burgundy Red */
+    --gift-gradient-start: #f9d3b3; /* Softer Warm Orange */
+    --gift-gradient-mid: #f8edd3; /* Softer Gold */
+    --gift-gradient-end: #d4a3ab; /* Softer Burgundy Red */
 
     /* Custom Theme (Same as Default for now, or define differently) */
     --custom-gradient-start: var(--default-gradient-start);

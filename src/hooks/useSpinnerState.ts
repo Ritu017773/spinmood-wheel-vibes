@@ -5,9 +5,12 @@ import { toast } from 'sonner';
 type Mood = 'study' | 'chill' | 'party' | 'gift' | 'custom';
 
 export const useSpinnerState = () => {
+  // Initial sample entries (increased to show more variety)
   const [customEntries, setCustomEntries] = useState<string[]>([
-    "Pizza", "Burger", "Sushi", "Tacos", "Salad", "Pasta"
+    "Pizza", "Burger", "Sushi", "Tacos", "Salad", "Pasta", 
+    "Ramen", "Curry", "Steak", "Sandwich", "Soup", "Seafood"
   ]);
+  
   const [currentMood, setCurrentMood] = useState<Mood>('study');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -18,9 +21,8 @@ export const useSpinnerState = () => {
     setCurrentResult(winner);
     setShowResultModal(true);
     
-    if (currentMood === 'party') {
-      createConfetti();
-    }
+    // Enhanced celebration for all themes, not just party
+    createConfetti(currentMood);
   };
   
   const toggleSound = () => {
@@ -28,8 +30,9 @@ export const useSpinnerState = () => {
     toast(soundEnabled ? "Sound turned off" : "Sound turned on");
   };
   
-  const createConfetti = () => {
-    const confettiCount = 150;
+  const createConfetti = (theme: Mood) => {
+    // Enhanced confetti effect - increased count and duration
+    const confettiCount = 200; // More particles
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.top = '0';
@@ -40,11 +43,28 @@ export const useSpinnerState = () => {
     container.style.zIndex = '9999';
     document.body.appendChild(container);
     
-    const colors = [
-      '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', 
-      '#536DFE', '#448AFF', '#40C4FF', '#18FFFF',
-      '#FFD700', '#FF6347', '#00FF7F', '#FF1493'
-    ];
+    // Theme-based colors for confetti
+    let colors: string[] = [];
+    
+    switch (theme) {
+      case 'study':
+        colors = ['#6989E0', '#4C6BC3', '#7D98E9', '#3B5DAF', '#8AA6F2', '#ffffff'];
+        break;
+      case 'chill':
+        colors = ['#6ECFB2', '#52B89A', '#83D7BE', '#42A487', '#97DECC', '#ffffff'];
+        break;
+      case 'party':
+        colors = ['#E069B5', '#C352A1', '#E982C3', '#B3458F', '#ED99CE', '#ffffff', '#ffcc00'];
+        break;
+      case 'gift':
+        colors = ['#E0B269', '#C39A52', '#E9C382', '#AF8B3B', '#F2D18A', '#ffffff', '#ff9933'];
+        break;
+      case 'custom':
+        colors = ['#69B6E0', '#528BC3', '#82C7E9', '#427AA4', '#99D5ED', '#ffffff'];
+        break;
+      default:
+        colors = ['#69B6E0', '#E069B5', '#6ECFB2', '#E0B269', '#ffffff'];
+    }
     
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div');
@@ -60,6 +80,7 @@ export const useSpinnerState = () => {
       container.appendChild(confetti);
     }
     
+    // Increased duration for celebration display
     setTimeout(() => {
       document.body.removeChild(container);
     }, 6000);

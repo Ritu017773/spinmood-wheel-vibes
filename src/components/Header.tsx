@@ -8,26 +8,35 @@ const Header = ({ onStartClick }: { onStartClick: () => void }) => {
     <header className="w-full py-4 px-4 sm:px-6 flex justify-between items-center backdrop-blur-sm bg-background/80 border-b border-white/10 sticky top-0 z-50">
       <div className="flex items-center space-x-3">
         <div className="logo-bounce">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10">
-            <circle cx="20" cy="20" r="20" fill="#3B82F6" />
-            <circle cx="20" cy="20" r="18" stroke="white" strokeWidth="1.5" fill="none" />
-            <circle cx="20" cy="20" r="2" fill="white" />
-            <circle cx="20" cy="11" r="1.5" fill="white" />
-            <circle cx="20" cy="29" r="1.5" fill="white" />
-            <circle cx="11" cy="20" r="1.5" fill="white" />
-            <circle cx="29" cy="20" r="1.5" fill="white" />
-            <circle cx="26.5" cy="13.5" r="1.5" fill="white" />
-            <circle cx="13.5" cy="26.5" r="1.5" fill="white" />
-            <circle cx="13.5" cy="13.5" r="1.5" fill="white" />
-            <circle cx="26.5" cy="26.5" r="1.5" fill="white" />
-            <path d="M20 10V14" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M20 26V30" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M14 14L16 16" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M24 24L26 26" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M10 20H14" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M26 20H30" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M14 26L16 24" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M24 16L26 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="SpinMood Ferris Wheel Logo">
+            {/* Main Structure */}
+            <circle cx="50" cy="50" r="38" stroke="#a855f7" strokeWidth="6" fill="none" /> {/* Outer Ring (Purple) */}
+            <circle cx="50" cy="50" r="15" fill="#facc15" /> {/* Center Circle (Yellow) */}
+
+            {/* Spokes (Dark Purple) */}
+            <line x1="50" y1="50" x2="50" y2="12" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="50" y2="88" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="12" y2="50" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="88" y2="50" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="26.2" y2="26.2" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="73.8" y2="73.8" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="26.2" y2="73.8" stroke="#6b21a8" strokeWidth="5"/>
+            <line x1="50" y1="50" x2="73.8" y2="26.2" stroke="#6b21a8" strokeWidth="5"/>
+
+            {/* Cabins (Representational - Lilac with Grey Top) */}
+            <rect x="45" y="5" width="10" height="12" rx="3" fill="#c4b5fd"/> <rect x="45" y="5" width="10" height="5" rx="2" fill="#d1d5db"/>
+            <rect x="45" y="83" width="10" height="12" rx="3" fill="#c4b5fd" transform="rotate(180 50 89)"/> <rect x="45" y="83" width="10" height="5" rx="2" fill="#d1d5db" transform="rotate(180 50 89)"/>
+            <rect x="5" y="45" width="12" height="10" rx="3" fill="#c4b5fd" transform="rotate(-90 11 50)"/> <rect x="5" y="45" width="5" height="10" rx="2" fill="#d1d5db" transform="rotate(-90 11 50)"/>
+            <rect x="83" y="45" width="12" height="10" rx="3" fill="#c4b5fd" transform="rotate(90 89 50)"/> <rect x="83" y="45" width="5" height="10" rx="2" fill="#d1d5db" transform="rotate(90 89 50)"/>
+            <rect x="20.2" y="20.2" width="11" height="11" rx="3" fill="#c4b5fd" transform="rotate(-45 26.2 26.2)"/> <rect x="20.2" y="20.2" width="8" height="5" rx="2" fill="#d1d5db" transform="rotate(-45 26.2 26.2) translate(0, -2)"/>
+            <rect x="68.8" y="68.8" width="11" height="11" rx="3" fill="#c4b5fd" transform="rotate(135 73.8 73.8)"/> <rect x="68.8" y="68.8" width="8" height="5" rx="2" fill="#d1d5db" transform="rotate(135 73.8 73.8) translate(0, -2)"/>
+            <rect x="20.2" y="68.8" width="11" height="11" rx="3" fill="#c4b5fd" transform="rotate(-135 26.2 73.8)"/> <rect x="20.2" y="68.8" width="8" height="5" rx="2" fill="#d1d5db" transform="rotate(-135 26.2 73.8) translate(0, -2)"/>
+            <rect x="68.8" y="20.2" width="11" height="11" rx="3" fill="#c4b5fd" transform="rotate(45 73.8 26.2)"/> <rect x="68.8" y="20.2" width="8" height="5" rx="2" fill="#d1d5db" transform="rotate(45 73.8 26.2) translate(0, -2)"/>
+
+            {/* Stand (Light Lilac) */}
+            <line x1="35" y1="88" x2="50" y2="65" stroke="#e0e7ff" strokeWidth="6"/>
+            <line x1="65" y1="88" x2="50" y2="65" stroke="#e0e7ff" strokeWidth="6"/>
+            <line x1="30" y1="88" x2="70" y2="88" stroke="#e0e7ff" strokeWidth="6" strokeLinecap="round"/>
           </svg>
         </div>
         <span className="font-bold text-xl md:text-2xl bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">

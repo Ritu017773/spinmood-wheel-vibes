@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import Confetti from '@/components/Confetti';
@@ -135,6 +136,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
+      // Play sound exactly when result is revealed
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
@@ -145,13 +147,14 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       setScale(1.08);
       setTimeout(() => setScale(1), 200);
       
+      // Extended result display time (5-6 seconds)
       setTimeout(() => {
         onSpinComplete(actualWinner);
         setIsSpinning(false);
         
         setTimeout(() => {
           setShowCelebration(false);
-        }, 3000);
+        }, 6000); // Extended celebration duration
       }, 1000);
     }, 5000);
   };
@@ -175,7 +178,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     }
   };
 
-  const getSegmentColor = (index: number, isEven: boolean) => {
+  const getSegmentColor = (index: number) => {
+    // Enhanced color wheel with 40 distinct colors for better visibility
     const colorWheel = [
       '#FF5252', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
       '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50',
@@ -199,6 +203,17 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     return colorWheel[baseColorIndex];
   };
 
+  const getFontSize = () => {
+    if (entries.length > 30) {
+      return '0.8rem';
+    } else if (entries.length > 20) {
+      return '0.9rem';
+    } else if (entries.length > 10) {
+      return '1rem';
+    }
+    return '1.1rem';
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-4 relative">
       <Confetti isActive={showCelebration} theme={theme} />
@@ -219,18 +234,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
             const rotation = index * sliceSizeDegrees;
             const skew = 90 - sliceSizeDegrees;
             
-            const segmentColor = getSegmentColor(index, index % 2 === 0);
+            const segmentColor = getSegmentColor(index);
             
             const isHighlighted = index === hoverSlice;
             
-            let fontSize = '1rem';
-            if (entries.length > 30) {
-              fontSize = '0.75rem';
-            } else if (entries.length > 20) {
-              fontSize = '0.85rem';
-            } else if (entries.length > 10) {
-              fontSize = '0.9rem';
-            }
+            const fontSize = getFontSize();
             
             return (
               <div
@@ -252,7 +260,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
                   style={{ 
                     transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)`,
                     fontSize: fontSize,
-                    fontWeight: 700,
+                    fontWeight: 800,
                     textShadow: '1px 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.7)'
                   }}
                 >
