@@ -230,6 +230,73 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   const getTextShadow = () => {
     return '0 0 2px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.9)';
   };
+  
+  // Function to render custom wheel segments with better text positioning
+  const renderCustomSegments = () => {
+    const isCustomTheme = theme === 'custom';
+    
+    return entries.map((entry, index) => {
+      const sliceSizeDegrees = 360 / entries.length;
+      const rotation = index * sliceSizeDegrees;
+      // Calculate skew angle based on entry count to ensure proper segment shape
+      const skew = entries.length <= 2 ? 0 : (90 - sliceSizeDegrees);
+      
+      const segmentColor = getSegmentColor(index, entries.length);
+      const isHighlighted = index === hoverSlice;
+      const fontSize = getFontSize();
+      const textShadow = getTextShadow();
+      
+      // Calculate optimal text rotation angle based on segment size
+      const textRotateAngle = sliceSizeDegrees / 2;
+      
+      // For custom theme, use more pronounced text styling
+      const textStyles = isCustomTheme ? {
+        transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
+        width: '140%',
+        left: '-5%',
+        bottom: '10%',
+        fontSize: fontSize,
+        fontWeight: 700,
+        textShadow: textShadow,
+        WebkitTextStroke: '0.5px white',
+        letterSpacing: '0.5px',
+        color: 'white'
+      } : {
+        transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
+        width: entries.length > 20 ? '150%' : '120%',
+        left: entries.length > 20 ? '-10%' : '-5%',
+        bottom: '5%',
+        fontSize: fontSize,
+        fontWeight: 700,
+        textShadow: textShadow,
+        WebkitTextStroke: entries.length > 25 ? '0.2px white' : 'none'
+      };
+      
+      return (
+        <div
+          key={index}
+          className="absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white transition-opacity duration-300"
+          style={{
+            transform: `rotate(${rotation}deg) skew(${skew}deg)`,
+            background: segmentColor,
+            opacity: isHighlighted ? 0.8 : 1,
+            boxShadow: isHighlighted ? 'inset 0 0 15px rgba(255,255,255,0.3)' : 'none'
+          }}
+          onMouseEnter={() => sliceHoverHandler(index)}
+          onMouseLeave={() => sliceHoverHandler(null)}
+        >
+          <div 
+            className="absolute flex items-center justify-center truncate"
+            style={textStyles}
+          >
+            <span className="truncate max-w-full inline-block">
+              {entry}
+            </span>
+          </div>
+        </div>
+      );
+    });
+  };
 
   return (
     <div className="flex flex-col items-center justify-center p-4 relative">
@@ -246,57 +313,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           }}
           onClick={handleSpin}
         >
-          {entries.length > 0 && entries.map((entry, index) => {
-            const sliceSizeDegrees = 360 / entries.length;
-            const rotation = index * sliceSizeDegrees;
-            // Calculate skew angle based on entry count to ensure proper segment shape
-            const skew = entries.length <= 2 ? 0 : (90 - sliceSizeDegrees);
-            
-            const segmentColor = getSegmentColor(index, entries.length);
-            const isHighlighted = index === hoverSlice;
-            const fontSize = getFontSize();
-            const textShadow = getTextShadow();
-            
-            // Calculate optimal text rotation angle based on segment size
-            const textRotateAngle = sliceSizeDegrees / 2;
-            
-            return (
-              <div
-                key={index}
-                className="absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white transition-opacity duration-300"
-                style={{
-                  transform: `rotate(${rotation}deg) skew(${skew}deg)`,
-                  background: segmentColor,
-                  opacity: isHighlighted ? 0.8 : 1,
-                  boxShadow: isHighlighted ? 'inset 0 0 15px rgba(255,255,255,0.3)' : 'none'
-                }}
-                onMouseEnter={() => sliceHoverHandler(index)}
-                onMouseLeave={() => sliceHoverHandler(null)}
-              >
-                <div 
-                  className="absolute flex items-center justify-center truncate"
-                  style={{ 
-                    // Position text optimally based on segment size
-                    transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
-                    width: entries.length > 20 ? '150%' : '120%',
-                    left: entries.length > 20 ? '-10%' : '-5%',
-                    bottom: '5%',
-                    textAlign: 'center',
-                    fontSize: fontSize,
-                    fontWeight: 700,
-                    // Enhanced text shadow for better readability against all background colors
-                    textShadow: textShadow,
-                    // Add white text stroke for extra readability on darker backgrounds
-                    WebkitTextStroke: entries.length > 25 ? '0.2px white' : 'none'
-                  }}
-                >
-                  <span className="truncate max-w-full inline-block">
-                    {entry}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+          {/* Render spinner segments */}
+          {renderCustomSegments()}
 
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none rounded-full"></div>

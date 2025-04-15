@@ -43,13 +43,11 @@ const Index = () => {
     };
   }, [currentMood]);
 
-  // Enhanced setCurrentMood function to scroll to spinner when mood changes
+  // Enhanced setCurrentMood function to always scroll to spinner when mood changes
   const handleMoodChange = (mood: 'study' | 'chill' | 'party' | 'gift' | 'custom') => {
     setCurrentMood(mood);
-    // Scroll to spinner after a brief delay to allow theme change to apply
-    setTimeout(() => {
-      scrollToSpinner();
-    }, 100);
+    // Scroll to spinner immediately after theme change
+    scrollToSpinner();
   };
 
   return (

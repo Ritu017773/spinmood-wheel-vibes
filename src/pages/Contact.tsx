@@ -21,6 +21,29 @@ const Contact = () => {
           />
           <meta name="keywords" content="contact SpinMood, SpinMood support, spinner wheel help, report issue SpinMood, online wheel support, free wheel spinner contact" />
           <link rel="canonical" href="https://spinmood.com/contact" />
+          <script type="application/ld+json">
+            {`
+              {
+                "@context": "https://schema.org",
+                "@type": "ContactPage",
+                "name": "Contact SpinMood Support",
+                "description": "Get support or provide feedback for the SpinMood free online spinner wheel.",
+                "url": "https://spinmood.com/contact",
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": "https://spinmood.com/contact"
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "SpinMood",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://spinmood.com/favicon.svg"
+                  }
+                }
+              }
+            `}
+          </script>
         </Helmet>
         
         <Header onStartClick={() => {}} />

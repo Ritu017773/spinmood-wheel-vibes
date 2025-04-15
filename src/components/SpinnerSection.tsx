@@ -78,6 +78,39 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
     }
   };
 
+  // Get theme-specific text shadow
+  const getTextShadow = () => {
+    switch (currentMood) {
+      case 'study':
+        return '0 2px 4px rgba(30, 64, 175, 0.5)';
+      case 'chill':
+        return '0 2px 4px rgba(126, 34, 206, 0.5)';
+      case 'party':
+        return '0 2px 4px rgba(225, 29, 72, 0.5)';
+      case 'gift':
+        return '0 2px 4px rgba(180, 83, 9, 0.5)';
+      case 'custom':
+        return '0 2px 4px rgba(5, 150, 105, 0.5)';
+      default:
+        return '0 2px 4px rgba(0, 0, 0, 0.5)';
+    }
+  };
+
+  const getThemeTagline = () => {
+    switch (currentMood) {
+      case 'study':
+        return "Perfect for classroom activities and educational decisions!";
+      case 'chill':
+        return "Ideal for relaxed, low-pressure choices and entertainment!";
+      case 'party':
+        return "Bring excitement to your celebrations and gatherings!";
+      case 'gift':
+        return "Make gift-giving and prize selections memorable!";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div id="spinner" className="py-16 transition-all duration-500 scroll-mt-20">
       <div className="container mx-auto px-4">
@@ -94,12 +127,12 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
                 <div className="text-center">
                   <h3 
                     className={`text-3xl font-extrabold mb-6 bg-gradient-to-r ${getThemeGradient()} bg-clip-text text-transparent animate-pulse-slow`}
-                    style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}
+                    style={{ textShadow: getTextShadow() }}
                   >
                     {currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode
                   </h3>
                   <p className="text-white text-xl font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
-                    Choose from <span className="font-extrabold text-2xl bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">{getCurrentEntries().length}</span> predefined options
+                    Choose from <span className="font-extrabold text-2xl bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{getCurrentEntries().length}</span> predefined options
                   </p>
                   <div className={`p-6 bg-white/15 backdrop-blur-md rounded-lg border border-white/20 shadow-xl ${getBoxShadow()}`}>
                     <div className="text-xl font-bold text-white leading-relaxed drop-shadow-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
@@ -107,12 +140,9 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
                     </div>
                     <div 
                       className={`mt-5 text-xl font-bold bg-gradient-to-r ${getThemeGradient()} bg-clip-text text-transparent`}
-                      style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
+                      style={{ textShadow: getTextShadow() }}
                     >
-                      {currentMood === 'study' && "Perfect for classroom activities and educational decisions!"}
-                      {currentMood === 'chill' && "Ideal for relaxed, low-pressure choices and entertainment!"}
-                      {currentMood === 'party' && "Bring excitement to your celebrations and gatherings!"}
-                      {currentMood === 'gift' && "Make gift-giving and prize selections memorable!"}
+                      {getThemeTagline()}
                     </div>
                   </div>
                 </div>
