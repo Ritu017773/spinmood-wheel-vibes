@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Providers from '@/components/Providers';
@@ -6,7 +7,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SchemaData from '@/components/SchemaData';
-import { Mail, MailOpen } from 'lucide-react';
+import { EnvelopeOpen, Mail } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -50,7 +51,7 @@ const Contact = () => {
                     For any questions, feedback, or technical support, please email us at:
                   </p>
                   <div className="inline-flex items-center justify-center bg-white/20 backdrop-blur rounded-lg px-5 py-4 text-xl font-bold text-white border-2 border-white/30">
-                    <MailOpen className="mr-2" size={24} />
+                    <EnvelopeOpen className="mr-2" size={24} />
                     admin@spinmood.com
                   </div>
                   <p className="mt-6 text-white/70">
