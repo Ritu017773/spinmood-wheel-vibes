@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import Confetti from '@/components/Confetti';
@@ -136,7 +135,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
-      // Play sound exactly when result is revealed
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
@@ -147,14 +145,13 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       setScale(1.08);
       setTimeout(() => setScale(1), 200);
       
-      // Extended result display time (5-6 seconds)
       setTimeout(() => {
         onSpinComplete(actualWinner);
         setIsSpinning(false);
         
         setTimeout(() => {
           setShowCelebration(false);
-        }, 6000); // Extended celebration duration
+        }, 6000);
       }, 1000);
     }, 5000);
   };
@@ -179,7 +176,6 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   };
 
   const getSegmentColor = (index: number) => {
-    // Enhanced color wheel with 40 distinct colors for better visibility
     const colorWheel = [
       '#FF5252', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
       '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50',
