@@ -69,6 +69,18 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
     }
   ];
 
+  const handleMoodChange = (mood: Mood) => {
+    onMoodChange(mood);
+    
+    // Scroll to spinner section after mood change
+    setTimeout(() => {
+      const spinnerSection = document.getElementById('spinner');
+      if (spinnerSection) {
+        spinnerSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <h3 className="text-xl font-bold text-white mb-6 text-center">Choose Your Mood</h3>
@@ -83,7 +95,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
                 ? 'ring-2 ring-offset-4 ring-offset-black/20 ring-white/70 shadow-lg' 
                 : 'hover:shadow-xl'}
             `}
-            onClick={() => onMoodChange(mood.id)}
+            onClick={() => handleMoodChange(mood.id)}
           >
             {/* Animated background */}
             <div className={`

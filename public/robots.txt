@@ -5,12 +5,20 @@ Allow: /
 # Priority pages for crawling
 Sitemap: https://spinmood.com/sitemap.xml
 
-# Allow Google to index everything
+# Allow Google to index everything with high priority
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 # Allow Bing to index everything
 User-agent: Bingbot
+Allow: /
+
+# Allow other search engines
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
 Allow: /
 
 # Allow social media crawlers
@@ -26,4 +34,4 @@ Allow: /
 User-agent: PinterestBot
 Allow: /
 
-# Optimized for maximum search engine visibility
+# Optimized for maximum search engine visibility and rapid indexing

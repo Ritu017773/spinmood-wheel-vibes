@@ -178,60 +178,57 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     }
   };
 
-  // Enhanced color generation to ensure unique and visually distinct colors,
-  // even with up to 40 entries
+  // Enhanced color generation to ensure unique and visually distinct colors for up to 40 entries
   const getSegmentColor = (index: number, totalEntries: number) => {
-    // Use HSL color model for better control over color distribution
-    const hue = (index * (360 / Math.max(totalEntries, 20))) % 360;
+    // Use a fixed hue increment based on golden ratio to ensure color distinction
+    const goldenRatioConjugate = 0.618033988749895;
+    let hue = (index * goldenRatioConjugate * 360) % 360;
     
     // Adjust saturation and brightness based on theme
     let saturation, lightness;
     
     switch (theme) {
       case 'study':
-        saturation = 65 + (index % 3) * 10;
-        lightness = 50 + (index % 5) * 5;
+        saturation = 65 + (index % 5) * 5;
+        lightness = 50 + (index % 7) * 3;
         break;
       case 'chill':
-        saturation = 70 + (index % 3) * 8;
-        lightness = 55 + (index % 5) * 4;
+        saturation = 70 + (index % 5) * 4;
+        lightness = 55 + (index % 7) * 3;
         break;
       case 'party':
-        saturation = 80 + (index % 3) * 10;
-        lightness = 50 + (index % 5) * 5;
+        saturation = 80 + (index % 5) * 4;
+        lightness = 50 + (index % 7) * 3;
         break;
       case 'gift':
-        saturation = 75 + (index % 3) * 8;
-        lightness = 52 + (index % 5) * 4;
+        saturation = 75 + (index % 5) * 5;
+        lightness = 52 + (index % 7) * 3;
         break;
       default:
-        saturation = 70 + (index % 3) * 10;
-        lightness = 50 + (index % 5) * 5;
+        saturation = 70 + (index % 5) * 5;
+        lightness = 50 + (index % 7) * 3;
     }
     
-    // Ensure lightness isn't too high (too pale) or too low (too dark)
-    lightness = Math.max(45, Math.min(lightness, 65));
+    // Ensure lightness isn't too high (too pale) or too low (too dark) for text readability
+    lightness = Math.max(40, Math.min(lightness, 65));
     
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
 
   // Dynamic font sizing based on number of entries
   const getFontSize = () => {
-    if (entries.length > 35) {
-      return '0.75rem';
-    } else if (entries.length > 25) {
-      return '0.85rem';
-    } else if (entries.length > 15) {
-      return '0.95rem';
-    } else if (entries.length > 10) {
-      return '1rem';
-    }
+    if (entries.length > 35) return '0.65rem';
+    if (entries.length > 30) return '0.7rem';
+    if (entries.length > 25) return '0.75rem';
+    if (entries.length > 20) return '0.8rem';
+    if (entries.length > 15) return '0.9rem';
+    if (entries.length > 10) return '1rem';
     return '1.1rem';
   };
 
   // Enhanced text shadow for better readability
   const getTextShadow = () => {
-    return '0 0 1px #000, 0 1px 1px rgba(0,0,0,0.9)';
+    return '0 0 2px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.9)';
   };
 
   return (
@@ -241,8 +238,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       <div className="relative" style={{ width: getWheelSize(), height: getWheelSize() }}>
         <div 
           ref={wheelRef}
-          className={`absolute w-full h-full rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)] border-4 
-                     border-white/10 cursor-pointer`}
+          className="absolute w-full h-full rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)] border-4 border-white/10 cursor-pointer"
           style={{ 
             transform: `rotate(${rotationDeg}deg) scale(${scale})`,
             boxShadow: `0 0 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--${theme}-primary, rgba(255,255,255,0.3))`,
@@ -250,23 +246,24 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           }}
           onClick={handleSpin}
         >
-          {entries.map((entry, index) => {
+          {entries.length > 0 && entries.map((entry, index) => {
             const sliceSizeDegrees = 360 / entries.length;
             const rotation = index * sliceSizeDegrees;
-            const skew = 90 - sliceSizeDegrees;
+            // Calculate skew angle based on entry count to ensure proper segment shape
+            const skew = entries.length <= 2 ? 0 : (90 - sliceSizeDegrees);
             
             const segmentColor = getSegmentColor(index, entries.length);
-            
             const isHighlighted = index === hoverSlice;
-            
             const fontSize = getFontSize();
             const textShadow = getTextShadow();
+            
+            // Calculate optimal text rotation angle based on segment size
+            const textRotateAngle = sliceSizeDegrees / 2;
             
             return (
               <div
                 key={index}
-                className={`absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white 
-                          transition-opacity duration-300`}
+                className="absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white transition-opacity duration-300"
                 style={{
                   transform: `rotate(${rotation}deg) skew(${skew}deg)`,
                   background: segmentColor,
@@ -277,16 +274,25 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
                 onMouseLeave={() => sliceHoverHandler(null)}
               >
                 <div 
-                  className="absolute -left-1 bottom-0 w-[200%] text-center rotate-[55deg] 
-                           font-extrabold truncate px-8 pt-8"
+                  className="absolute flex items-center justify-center truncate"
                   style={{ 
-                    transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)`,
+                    // Position text optimally based on segment size
+                    transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
+                    width: entries.length > 20 ? '150%' : '120%',
+                    left: entries.length > 20 ? '-10%' : '-5%',
+                    bottom: '5%',
+                    textAlign: 'center',
                     fontSize: fontSize,
-                    fontWeight: 800,
-                    textShadow: textShadow
+                    fontWeight: 700,
+                    // Enhanced text shadow for better readability against all background colors
+                    textShadow: textShadow,
+                    // Add white text stroke for extra readability on darker backgrounds
+                    WebkitTextStroke: entries.length > 25 ? '0.2px white' : 'none'
                   }}
                 >
-                  {entry}
+                  <span className="truncate max-w-full inline-block">
+                    {entry}
+                  </span>
                 </div>
               </div>
             );
@@ -304,9 +310,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         ></div>
         
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 
-                   rounded-full bg-gradient-to-br from-white/90 to-white/60 shadow-lg z-10 
-                   flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-br from-white/90 to-white/60 shadow-lg z-10 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           style={{
             boxShadow: `0 0 15px var(--${theme}-primary, rgba(255,255,255,0.5))`,
           }}
@@ -325,8 +329,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-4 w-8 h-8 z-10">
           <div 
-            className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] 
-                     border-r-transparent border-t-[28px] border-t-white drop-shadow-lg mx-auto"
+            className="w-0 h-0 border-l-[18px] border-l-transparent border-r-[18px] border-r-transparent border-t-[28px] border-t-white drop-shadow-lg mx-auto"
             style={{
               filter: `drop-shadow(0 0 5px var(--${theme}-primary))`,
             }}  
