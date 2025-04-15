@@ -43,6 +43,15 @@ const Index = () => {
     };
   }, [currentMood]);
 
+  // Enhanced setCurrentMood function to scroll to spinner when mood changes
+  const handleMoodChange = (mood: 'study' | 'chill' | 'party' | 'gift' | 'custom') => {
+    setCurrentMood(mood);
+    // Scroll to spinner after a brief delay to allow theme change to apply
+    setTimeout(() => {
+      scrollToSpinner();
+    }, 100);
+  };
+
   return (
     <Providers>
       <div className="min-h-screen flex flex-col text-foreground">
@@ -72,7 +81,7 @@ const Index = () => {
           
           <PersonalizationSection 
             currentMood={currentMood}
-            onMoodChange={setCurrentMood}
+            onMoodChange={handleMoodChange}
             soundEnabled={soundEnabled}
             toggleSound={toggleSound}
           />

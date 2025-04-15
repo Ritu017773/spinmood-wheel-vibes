@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SchemaData from '@/components/SchemaData';
-import { EnvelopeOpen, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -35,8 +35,8 @@ const Contact = () => {
             </Link>
             
             <div className="text-center mb-10">
-              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-4">Contact SpinMood</h1>
-              <p className="text-xl text-white/90 font-semibold max-w-2xl mx-auto">We'd love to hear from you! Get support, share feedback, or report issues.</p>
+              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-4" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Contact SpinMood</h1>
+              <p className="text-xl text-white font-bold max-w-2xl mx-auto" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.3)' }}>We'd love to hear from you! Get support, share feedback, or report issues.</p>
             </div>
             
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8 shadow-xl">
@@ -46,23 +46,23 @@ const Contact = () => {
                 </div>
                 
                 <div className="text-center md:text-left">
-                  <h2 className="text-2xl font-bold text-white mb-3">Email Us</h2>
-                  <p className="text-lg text-white/80 font-medium mb-6">
+                  <h2 className="text-2xl font-bold text-white mb-3" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>Email Us</h2>
+                  <p className="text-lg text-white font-bold mb-6" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.3)' }}>
                     For any questions, feedback, or technical support, please email us at:
                   </p>
-                  <div className="inline-flex items-center justify-center bg-white/20 backdrop-blur rounded-lg px-5 py-4 text-xl font-bold text-white border-2 border-white/30">
-                    <EnvelopeOpen className="mr-2" size={24} />
+                  <div className="inline-flex items-center justify-center bg-white/20 backdrop-blur rounded-lg px-5 py-4 text-xl font-bold text-white border-2 border-white/30" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.3)' }}>
+                    <Mail className="mr-2" size={24} />
                     admin@spinmood.com
                   </div>
-                  <p className="mt-6 text-white/70">
+                  <p className="mt-6 text-white font-medium" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.3)' }}>
                     We strive to respond to all inquiries within 24-48 hours.
                   </p>
                 </div>
               </div>
               
               <div className="mt-12 border-t border-white/10 pt-8">
-                <h3 className="text-xl font-bold text-white mb-4">Common Inquiries</h3>
-                <ul className="space-y-2 text-white/90 font-medium">
+                <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>Common Inquiries</h3>
+                <ul className="space-y-2 text-white font-bold" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.3)' }}>
                   <li>• Technical issues with the spinner wheel</li>
                   <li>• Feature requests or suggestions</li>
                   <li>• General questions about using SpinMood</li>
@@ -73,7 +73,7 @@ const Contact = () => {
               
               <div className="mt-10 text-center">
                 <Link to="/">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
                     Return to SpinMood
                   </Button>
                 </Link>

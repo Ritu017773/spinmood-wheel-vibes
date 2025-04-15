@@ -349,6 +349,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         style={{
           background: `linear-gradient(135deg, var(--${theme}-primary), var(--${theme}-secondary))`,
           boxShadow: `0 4px 20px var(--${theme}-primary, rgba(0,0,0,0.3))`,
+          textShadow: '0 1px 2px rgba(0,0,0,0.3)'
         }}
       >
         {isSpinning ? 'SPINNING...' : 'SPIN'}

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="w-full py-12 px-4">
+    <footer className="w-full py-12 px-4 bg-black/30 backdrop-blur-md">
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center text-center">
           <Link to="/" className="mb-4 flex items-center">
@@ -34,38 +34,42 @@ const Footer = () => {
             <span className="text-2xl font-bold text-white">SpinMood</span>
           </Link>
           
-          <p className="text-lg font-semibold text-white/90 mb-6 max-w-md">
+          <p className="text-lg font-bold text-white mb-6 max-w-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
             The best free online spinner wheel for giveaways, classrooms, decisions, and fun!
           </p>
           
           <div className="flex flex-wrap justify-center gap-6 mb-8">
             <Link 
               to="/" 
-              className="text-white text-base md:text-lg font-semibold hover:text-primary transition-colors"
+              className="text-white text-base md:text-lg font-bold hover:text-primary transition-colors"
+              style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
             >
               Home
             </Link>
             <Link 
               to="/privacy-policy" 
-              className="text-white text-base md:text-lg font-semibold hover:text-primary transition-colors"
+              className="text-white text-base md:text-lg font-bold hover:text-primary transition-colors"
+              style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
             >
               Privacy Policy
             </Link>
             <Link 
               to="/terms-conditions" 
-              className="text-white text-base md:text-lg font-semibold hover:text-primary transition-colors"
+              className="text-white text-base md:text-lg font-bold hover:text-primary transition-colors"
+              style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
             >
               Terms & Conditions
             </Link>
             <Link 
               to="/contact" 
-              className="text-white text-base md:text-lg font-semibold hover:text-primary transition-colors"
+              className="text-white text-base md:text-lg font-bold hover:text-primary transition-colors"
+              style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
             >
               Contact Us
             </Link>
           </div>
           
-          <div className="text-white/80 text-base font-medium border-t border-white/10 pt-6 w-full">
+          <div className="text-white text-base font-bold border-t border-white/20 pt-6 w-full" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}>
             <p className="mb-2">© {new Date().getFullYear()} SpinMood. All rights reserved.</p>
             <p>Made with ♥ for teachers, students, and decision-makers everywhere</p>
           </div>

@@ -90,7 +90,7 @@ export const useSpinnerState = () => {
     customEntries,
     setCustomEntries,
     currentMood,
-    setCurrentMood: handleMoodChange,
+    setCurrentMood,
     soundEnabled,
     toggleSound,
     isSpinning,
@@ -100,8 +100,4 @@ export const useSpinnerState = () => {
     currentResult,
     handleSpinComplete
   };
-  
-  function handleMoodChange(mood: Mood) {
-    setCurrentMood(mood);
-  }
 };
