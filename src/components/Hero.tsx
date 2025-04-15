@@ -42,17 +42,17 @@ const Hero = ({ onStartClick }: { onStartClick: () => void }) => {
         </div>
         
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
-          <span className="block mb-3 text-indigo-900">SpinMood</span>
+          <span className="block mb-3 text-indigo-900 drop-shadow-sm">SpinMood</span>
           <span className="bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-700 bg-clip-text text-transparent">
             The <span className="font-black">Best Free</span> Online Spinner Wheel
           </span>
         </h1>
         
-        <p className="text-xl md:text-2xl text-indigo-900 max-w-3xl mx-auto font-medium">
-          Make <span className="font-bold text-purple-800">Every Decision Fun & Easy</span>. SpinMood is 
-          <span className="font-bold text-purple-800"> lightning-fast</span>, 
-          <span className="font-bold text-purple-800"> sound-enabled</span>, 
-          <span className="font-bold text-purple-800"> mood-themed</span> — from giveaways to study to parties.
+        <p className="text-xl md:text-2xl text-indigo-900 max-w-3xl mx-auto font-bold">
+          Make <span className="font-black text-purple-800">Every Decision Fun & Easy</span>. SpinMood is 
+          <span className="font-black text-purple-800"> lightning-fast</span>, 
+          <span className="font-black text-purple-800"> sound-enabled</span>, 
+          <span className="font-black text-purple-800"> mood-themed</span> — perfect for giveaways, classrooms, parties, and more!
         </p>
         
         <div className="pt-6">
@@ -61,15 +61,15 @@ const Hero = ({ onStartClick }: { onStartClick: () => void }) => {
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/20 animate-pulse-slow glow font-bold"
           >
-            Start Spinning
+            Start Spinning Now
           </Button>
         </div>
         
-        <div className="pt-8 text-base text-indigo-900 flex flex-wrap justify-center gap-4 font-semibold">
-          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-primary mr-2 glow"></span> Giveaways</span>
-          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-study-primary mr-2 glow"></span> Study</span>
-          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-chill-primary mr-2 glow"></span> Chill</span>
-          <span className="flex items-center"><span className="h-2 w-2 rounded-full bg-party-primary mr-2 glow"></span> Fun</span>
+        <div className="pt-8 text-base text-indigo-900 flex flex-wrap justify-center gap-6 font-bold">
+          <span className="flex items-center"><span className="h-3 w-3 rounded-full bg-primary mr-2 glow"></span> Instagram Giveaways</span>
+          <span className="flex items-center"><span className="h-3 w-3 rounded-full bg-study-primary mr-2 glow"></span> Classroom Tool</span>
+          <span className="flex items-center"><span className="h-3 w-3 rounded-full bg-chill-primary mr-2 glow"></span> Decision Making</span>
+          <span className="flex items-center"><span className="h-3 w-3 rounded-full bg-party-primary mr-2 glow"></span> Party Games</span>
         </div>
       </div>
     </section>

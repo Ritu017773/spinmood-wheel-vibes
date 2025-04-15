@@ -27,12 +27,24 @@ const FAQSection = () => {
     },
     {
       question: "Can I customize the spinner wheel?",
-      answer: "Yes! You can add any text entries you want, choose from our four mood themes (Study, Chill, Party, Gift), and toggle sound effects on or off to match your preferences or environment."
+      answer: "Yes! You can add any text entries you want (up to 40), choose from our four mood themes (Study, Chill, Party, Gift), and toggle sound effects on or off to match your preferences or environment."
+    },
+    {
+      question: "How many names can I add to the spinner wheel?",
+      answer: "SpinMood supports up to 40 custom names on your spinner wheel. Each name will be displayed clearly with its own unique color segment on the wheel."
+    },
+    {
+      question: "Is SpinMood suitable for classroom use?",
+      answer: "Absolutely! Many teachers use SpinMood for randomly selecting students, assigning tasks, creating engaging review games, or making classroom decisions more fun and fair."
+    },
+    {
+      question: "How do I share my SpinMood wheel with others?",
+      answer: "Currently, you can take a screenshot or screen recording of your wheel to share with others. We're working on adding direct sharing functionality in the future!"
     }
   ];
 
   return (
-    <section className="max-w-3xl mx-auto w-full px-4 py-12">
+    <section id="faq" className="max-w-3xl mx-auto w-full px-4 py-12">
       <h2 className="text-2xl font-bold text-center mb-8 text-white">Frequently Asked Questions</h2>
       
       <Accordion type="single" collapsible className="w-full">
@@ -41,7 +53,7 @@ const FAQSection = () => {
             <AccordionTrigger className="text-lg font-bold text-white/90 hover:text-white py-4">
               {faq.question}
             </AccordionTrigger>
-            <AccordionContent className="text-white/90 text-base font-semibold leading-relaxed pb-4">
+            <AccordionContent className="text-white/90 text-base font-bold leading-relaxed pb-4 bg-black/10 p-4 rounded-md">
               {faq.answer}
             </AccordionContent>
           </AccordionItem>

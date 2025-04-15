@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import Confetti from '@/components/Confetti';
@@ -135,6 +136,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       setWinner(actualWinner);
       
+      // Play result sound exactly on result reveal
       if (soundEnabled && resultSoundRef.current) {
         resultSoundRef.current.currentTime = 0;
         resultSoundRef.current.play().catch(e => console.log("Audio play failed:", e));
@@ -145,6 +147,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       setScale(1.08);
       setTimeout(() => setScale(1), 200);
       
+      // Extended result display duration to 6 seconds
       setTimeout(() => {
         onSpinComplete(actualWinner);
         setIsSpinning(false);
@@ -175,39 +178,60 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     }
   };
 
-  const getSegmentColor = (index: number) => {
-    const colorWheel = [
-      '#FF5252', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
-      '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50',
-      '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800',
-      '#FF5722', '#795548', '#9E9E9E', '#607D8B', '#F44336',
-      '#E53935', '#D32F2F', '#C2185B', '#AD1457', '#880E4F',
-      '#8E24AA', '#6A1B9A', '#4A148C', '#5E35B1', '#3949AB',
-      '#283593', '#1A237E', '#1976D2', '#1565C0', '#0D47A1',
-      '#0097A7', '#00796B', '#00695C', '#2E7D32', '#1B5E20',
-      '#33691E', '#F57F17', '#FF6F00', '#E65100', '#BF360C'
-    ];
+  // Enhanced color generation to ensure unique and visually distinct colors,
+  // even with up to 40 entries
+  const getSegmentColor = (index: number, totalEntries: number) => {
+    // Use HSL color model for better control over color distribution
+    const hue = (index * (360 / Math.max(totalEntries, 20))) % 360;
     
-    if (entries.length > 40) {
-      const hue = (index * (360 / entries.length)) % 360;
-      const saturation = 70 + (index % 3) * 10;
-      const lightness = 45 + (index % 5) * 5;
-      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    } 
+    // Adjust saturation and brightness based on theme
+    let saturation, lightness;
     
-    const baseColorIndex = index % colorWheel.length;
-    return colorWheel[baseColorIndex];
+    switch (theme) {
+      case 'study':
+        saturation = 65 + (index % 3) * 10;
+        lightness = 50 + (index % 5) * 5;
+        break;
+      case 'chill':
+        saturation = 70 + (index % 3) * 8;
+        lightness = 55 + (index % 5) * 4;
+        break;
+      case 'party':
+        saturation = 80 + (index % 3) * 10;
+        lightness = 50 + (index % 5) * 5;
+        break;
+      case 'gift':
+        saturation = 75 + (index % 3) * 8;
+        lightness = 52 + (index % 5) * 4;
+        break;
+      default:
+        saturation = 70 + (index % 3) * 10;
+        lightness = 50 + (index % 5) * 5;
+    }
+    
+    // Ensure lightness isn't too high (too pale) or too low (too dark)
+    lightness = Math.max(45, Math.min(lightness, 65));
+    
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
 
+  // Dynamic font sizing based on number of entries
   const getFontSize = () => {
-    if (entries.length > 30) {
-      return '0.8rem';
-    } else if (entries.length > 20) {
-      return '0.9rem';
+    if (entries.length > 35) {
+      return '0.75rem';
+    } else if (entries.length > 25) {
+      return '0.85rem';
+    } else if (entries.length > 15) {
+      return '0.95rem';
     } else if (entries.length > 10) {
       return '1rem';
     }
     return '1.1rem';
+  };
+
+  // Enhanced text shadow for better readability
+  const getTextShadow = () => {
+    return '0 0 1px #000, 0 1px 1px rgba(0,0,0,0.9)';
   };
 
   return (
@@ -218,28 +242,30 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         <div 
           ref={wheelRef}
           className={`absolute w-full h-full rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)] border-4 
-                     border-white/10`}
+                     border-white/10 cursor-pointer`}
           style={{ 
             transform: `rotate(${rotationDeg}deg) scale(${scale})`,
             boxShadow: `0 0 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--${theme}-primary, rgba(255,255,255,0.3))`,
             transition: isSpinning ? 'transform 5s cubic-bezier(0.18, 0.89, 0.32, 1.28)' : 'transform 0.3s ease-out'
           }}
+          onClick={handleSpin}
         >
           {entries.map((entry, index) => {
             const sliceSizeDegrees = 360 / entries.length;
             const rotation = index * sliceSizeDegrees;
             const skew = 90 - sliceSizeDegrees;
             
-            const segmentColor = getSegmentColor(index);
+            const segmentColor = getSegmentColor(index, entries.length);
             
             const isHighlighted = index === hoverSlice;
             
             const fontSize = getFontSize();
+            const textShadow = getTextShadow();
             
             return (
               <div
                 key={index}
-                className={`absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white/90 
+                className={`absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white 
                           transition-opacity duration-300`}
                 style={{
                   transform: `rotate(${rotation}deg) skew(${skew}deg)`,
@@ -252,12 +278,12 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
               >
                 <div 
                   className="absolute -left-1 bottom-0 w-[200%] text-center rotate-[55deg] 
-                           font-bold truncate px-8 pt-8"
+                           font-extrabold truncate px-8 pt-8"
                   style={{ 
                     transform: `rotate(${sliceSizeDegrees/2}deg) skew(${-skew}deg)`,
                     fontSize: fontSize,
                     fontWeight: 800,
-                    textShadow: '1px 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.7)'
+                    textShadow: textShadow
                   }}
                 >
                   {entry}
