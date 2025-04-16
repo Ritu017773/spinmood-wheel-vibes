@@ -44,7 +44,7 @@ const Hero = ({ onStartClick }: { onStartClick: () => void }) => {
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
           <span className="block mb-3 text-indigo-900 drop-shadow-sm">SpinMood</span>
           <span className="bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-700 bg-clip-text text-transparent">
-            The <span className="font-black">Best Free</span> Online Spinner Wheel
+            The <span className="font-black">Best Free</span> Online Spinner Wheel & Games
           </span>
         </h1>
         
