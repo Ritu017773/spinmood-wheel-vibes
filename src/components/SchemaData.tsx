@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -5,6 +6,7 @@ const SchemaData = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isGamesPage = location.pathname === '/games';
+  const isContactPage = location.pathname === '/contact';
   
   // Base URL for the website
   const baseUrl = 'https://spinmood.com';
@@ -181,6 +183,27 @@ const SchemaData = () => {
     ]
   };
 
+  // Contact Page Schema
+  const contactPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    'name': 'Contact SpinMood Support',
+    'description': 'Get support or provide feedback for the SpinMood free online spinner wheel and games.',
+    'url': `${baseUrl}/contact`,
+    'mainEntityOfPage': {
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/contact`
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'SpinMood',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': `${baseUrl}/favicon.svg`
+      }
+    }
+  };
+
   // FAQ schema
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -188,7 +211,7 @@ const SchemaData = () => {
     'mainEntity': [
       {
         '@type': 'Question',
-        'name': 'How does SpinMood's wheel spinner work?',
+        'name': 'How does SpinMood\'s wheel spinner work?',
         'acceptedAnswer': { 
           '@type': 'Answer', 
           'text': 'SpinMood uses a mathematically fair random algorithm to ensure each entry on the wheel has an equal chance of winning. Simply add your entries, customize the look if you want, and hit the spin button!' 
@@ -258,6 +281,17 @@ const SchemaData = () => {
         <>
           <script type="application/ld+json">
             {JSON.stringify(gamesCollectionSchema)}
+          </script>
+          <script type="application/ld+json">
+            {JSON.stringify(organizationSchema)}
+          </script>
+        </>
+      );
+    } else if (isContactPage) {
+      return (
+        <>
+          <script type="application/ld+json">
+            {JSON.stringify(contactPageSchema)}
           </script>
           <script type="application/ld+json">
             {JSON.stringify(organizationSchema)}
