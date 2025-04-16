@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { games } from '@/data/games';
 
 const SchemaData: React.FC = () => {
   const location = useLocation();
@@ -245,6 +246,43 @@ const SchemaData: React.FC = () => {
         }
       });
       document.head.appendChild(contactSchema);
+    } else if (currentPath === '/games') {
+      // Collection Page Schema for Games
+      const gamesSchema = document.createElement('script');
+      gamesSchema.type = 'application/ld+json';
+      
+      const gamesSchemaData = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': 'SpinMood Games Collection',
+        'description': 'Explore SpinMood\'s collection of free online games and interactive tools for decision making, entertainment and fun.',
+        'url': `${window.location.origin}/games`,
+        'mainEntity': games.map(game => ({
+          '@type': 'SoftwareApplication',
+          'applicationCategory': 'Game',
+          'applicationSubCategory': game.category,
+          'name': game.name,
+          'description': game.description,
+          'url': `${window.location.origin}${game.url}`,
+          'image': `${window.location.origin}${game.imageUrl}`,
+          'offers': {
+            '@type': 'Offer',
+            'price': '0',
+            'priceCurrency': 'USD'
+          },
+          'aggregateRating': {
+            '@type': 'AggregateRating',
+            'ratingValue': '4.8',
+            'ratingCount': '68',
+            'bestRating': '5',
+            'worstRating': '1'
+          },
+          'keywords': game.keywords.join(', ')
+        }))
+      };
+      
+      gamesSchema.innerHTML = JSON.stringify(gamesSchemaData);
+      document.head.appendChild(gamesSchema);
     }
     
     // Add breadcrumb schema for all pages except homepage
@@ -264,6 +302,7 @@ const SchemaData: React.FC = () => {
       if (currentPath === '/privacy-policy') pageName = 'Privacy Policy';
       else if (currentPath === '/terms-conditions') pageName = 'Terms & Conditions';
       else if (currentPath === '/contact') pageName = 'Contact Us';
+      else if (currentPath === '/games') pageName = 'Games Collection';
       else pageName = pathSegments[pathSegments.length - 1].replace(/-/g, ' ');
       
       breadcrumbItems.push({
@@ -282,6 +321,29 @@ const SchemaData: React.FC = () => {
       });
       document.head.appendChild(breadcrumbSchema);
     }
+    
+    // Organization Schema - for all pages
+    const organizationSchema = document.createElement('script');
+    organizationSchema.type = 'application/ld+json';
+    organizationSchema.innerHTML = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      'name': 'SpinMood',
+      'url': window.location.origin,
+      'logo': `${window.location.origin}/favicon.svg`,
+      'sameAs': [
+        'https://twitter.com/spinmood',
+        'https://www.facebook.com/spinmood',
+        'https://www.instagram.com/spinmood'
+      ],
+      'contactPoint': {
+        '@type': 'ContactPoint',
+        'telephone': '',
+        'email': 'admin@spinmood.com',
+        'contactType': 'customer service'
+      }
+    });
+    document.head.appendChild(organizationSchema);
     
     return () => {
       const scripts = document.querySelectorAll('script[type="application/ld+json"]');

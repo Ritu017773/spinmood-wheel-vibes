@@ -34,4 +34,8 @@ Allow: /
 User-agent: PinterestBot
 Allow: /
 
+# Game pages - high priority
+Allow: /games
+Allow: /games/*
+
 # Optimized for maximum search engine visibility and rapid indexing

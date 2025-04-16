@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Link } from 'react-router-dom';
 
 const Header = ({ onStartClick }: { onStartClick: () => void }) => {
   return (
@@ -39,23 +40,33 @@ const Header = ({ onStartClick }: { onStartClick: () => void }) => {
             <line x1="30" y1="88" x2="70" y2="88" stroke="#e0e7ff" strokeWidth="6" strokeLinecap="round"/>
           </svg>
         </div>
-        <span className="font-bold text-xl md:text-2xl bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+        <Link to="/" className="font-bold text-xl md:text-2xl bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
           SpinMood
-        </span>
+        </Link>
       </div>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button 
-            onClick={onStartClick}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground glow font-bold"
-          >
-            Start Spinning
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <span className="font-medium">Jump to the spinner section</span>
-        </TooltipContent>
-      </Tooltip>
+      
+      <div className="flex items-center space-x-2 md:space-x-4">
+        <Link 
+          to="/games" 
+          className="px-4 py-2 mr-2 rounded-md font-bold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors text-white"
+          style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
+        >
+          Games
+        </Link>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              onClick={onStartClick}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground glow font-bold"
+            >
+              Start Spinning
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span className="font-medium">Jump to the spinner section</span>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </header>
   );
 };

@@ -23,6 +23,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   const [rotationDeg, setRotationDeg] = useState(0);
   const [winner, setWinner] = useState<string | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const spinSoundRef = useRef<HTMLAudioElement | null>(null);
   const resultSoundRef = useRef<HTMLAudioElement | null>(null);
   const idleAnimationRef = useRef<number | null>(null);
@@ -48,6 +49,14 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       }
     };
   }, []);
+
+  // Effect to draw wheel when entries or theme changes
+  useEffect(() => {
+    if (theme === 'custom' && entries.length >= 2) {
+      // For the custom theme, use canvas for better rendering
+      drawCustomWheelOnCanvas();
+    }
+  }, [entries, theme]);
 
   useEffect(() => {
     if (isSpinning || entries.length < 2) return;
@@ -79,6 +88,101 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       }
     };
   }, [isSpinning, entries.length, rotationDeg, scale]);
+
+  const drawCustomWheelOnCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const numEntries = entries.length;
+    if (numEntries < 2) return;
+    
+    // Get the actual size of the displayed canvas
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = Math.min(centerX, centerY) - 10;
+    
+    // Calculate angle per slice
+    const anglePerSlice = (Math.PI * 2) / numEntries;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw segments
+    for (let i = 0; i < numEntries; i++) {
+      // Get segment color
+      const segmentColor = getSegmentColor(i, numEntries);
+      
+      // Calculate angles
+      const startAngle = i * anglePerSlice;
+      const endAngle = (i + 1) * anglePerSlice;
+      
+      // Draw segment
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = segmentColor;
+      ctx.fill();
+      
+      // Add border between segments
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.stroke();
+      
+      // Calculate text position
+      const midAngle = startAngle + (anglePerSlice / 2);
+      const textRadius = radius * 0.75; // Position text at 75% of radius
+      const textX = centerX + Math.cos(midAngle) * textRadius;
+      const textY = centerY + Math.sin(midAngle) * textRadius;
+      
+      // Set text properties
+      ctx.save();
+      ctx.translate(textX, textY);
+      ctx.rotate(midAngle + Math.PI / 2); // Rotate text
+      
+      // Adaptive font size based on number of entries
+      const fontSize = getFontSize();
+      ctx.font = `bold ${fontSize} Arial, sans-serif`;
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      
+      // Add text stroke for better readability
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.strokeText(entries[i], 0, 0);
+      ctx.fillText(entries[i], 0, 0);
+      
+      ctx.restore();
+    }
+    
+    // Draw center circle
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius * 0.1, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw outer border
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  };
 
   const handleSpin = () => {
     if (isSpinning || entries.length < 2) return;
@@ -235,6 +339,16 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   const renderCustomSegments = () => {
     const isCustomTheme = theme === 'custom';
     
+    if (isCustomTheme) {
+      // For custom theme, use canvas
+      return (
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full rounded-full"
+        />
+      );
+    }
+    
     return entries.map((entry, index) => {
       const sliceSizeDegrees = 360 / entries.length;
       const rotation = index * sliceSizeDegrees;
@@ -249,19 +363,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       // Calculate optimal text rotation angle based on segment size
       const textRotateAngle = sliceSizeDegrees / 2;
       
-      // For custom theme, use more pronounced text styling
-      const textStyles = isCustomTheme ? {
-        transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
-        width: '140%',
-        left: '-5%',
-        bottom: '10%',
-        fontSize: fontSize,
-        fontWeight: 700,
-        textShadow: textShadow,
-        WebkitTextStroke: '0.5px white',
-        letterSpacing: '0.5px',
-        color: 'white'
-      } : {
+      // Improved text styling for better readability
+      const textStyles = {
         transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
         width: entries.length > 20 ? '150%' : '120%',
         left: entries.length > 20 ? '-10%' : '-5%',
@@ -269,7 +372,8 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         fontSize: fontSize,
         fontWeight: 700,
         textShadow: textShadow,
-        WebkitTextStroke: entries.length > 25 ? '0.2px white' : 'none'
+        WebkitTextStroke: entries.length > 25 ? '0.3px white' : 'none',
+        color: 'white'
       };
       
       return (

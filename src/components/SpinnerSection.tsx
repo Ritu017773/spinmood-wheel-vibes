@@ -64,17 +64,17 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
   const getBoxShadow = () => {
     switch (currentMood) {
       case 'study':
-        return 'shadow-blue-800/20';
+        return 'shadow-blue-800/30';
       case 'chill':
-        return 'shadow-purple-800/20';
+        return 'shadow-purple-800/30';
       case 'party':
-        return 'shadow-red-800/20';
+        return 'shadow-red-800/30';
       case 'gift':
-        return 'shadow-amber-800/20';
+        return 'shadow-amber-800/30';
       case 'custom':
-        return 'shadow-emerald-800/20';
+        return 'shadow-emerald-800/30';
       default:
-        return 'shadow-blue-800/20';
+        return 'shadow-blue-800/30';
     }
   };
 
@@ -96,6 +96,7 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
     }
   };
 
+  // Get theme-specific tagline
   const getThemeTagline = () => {
     switch (currentMood) {
       case 'study':
@@ -127,20 +128,26 @@ const SpinnerSection: React.FC<SpinnerSectionProps> = ({
                 <div className="text-center">
                   <h3 
                     className={`text-3xl font-extrabold mb-6 bg-gradient-to-r ${getThemeGradient()} bg-clip-text text-transparent animate-pulse-slow`}
-                    style={{ textShadow: getTextShadow() }}
+                    style={{ 
+                      textShadow: `${getTextShadow()}, 0 0 1px rgba(255,255,255,0.2)`,
+                      WebkitTextStroke: '0.5px rgba(255,255,255,0.1)'
+                    }}
                   >
                     {currentMood.charAt(0).toUpperCase() + currentMood.slice(1)} Mode
                   </h3>
-                  <p className="text-white text-xl font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
-                    Choose from <span className="font-extrabold text-2xl bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{getCurrentEntries().length}</span> predefined options
+                  <p className="text-white text-xl font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                    Choose from <span className="font-extrabold text-2xl bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.6)', WebkitTextStroke: '0.5px rgba(255,255,255,0.1)' }}>{getCurrentEntries().length}</span> predefined options
                   </p>
                   <div className={`p-6 bg-white/15 backdrop-blur-md rounded-lg border border-white/20 shadow-xl ${getBoxShadow()}`}>
-                    <div className="text-xl font-bold text-white leading-relaxed drop-shadow-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                    <div className="text-xl font-bold text-white leading-relaxed drop-shadow-md" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                       Spin the wheel to randomly select from our curated list of {currentMood} options!
                     </div>
                     <div 
                       className={`mt-5 text-xl font-bold bg-gradient-to-r ${getThemeGradient()} bg-clip-text text-transparent`}
-                      style={{ textShadow: getTextShadow() }}
+                      style={{ 
+                        textShadow: `${getTextShadow()}, 0 0 1px rgba(255,255,255,0.2)`,
+                        WebkitTextStroke: '0.5px rgba(255,255,255,0.1)' 
+                      }}
                     >
                       {getThemeTagline()}
                     </div>
