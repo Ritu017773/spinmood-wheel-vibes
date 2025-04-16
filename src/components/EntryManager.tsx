@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +15,6 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkEntries, setBulkEntries] = useState('');
   
-  // Maximum number of entries allowed (increased to 40 as requested)
   const MAX_ENTRIES = 40;
 
   const addEntry = () => {
@@ -46,7 +44,6 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
       return;
     }
     
-    // Process entries from bulk text by splitting on commas or line breaks
     const newEntries = bulkEntries
       .split(/[,\n]+/)
       .map(entry => entry.trim())
@@ -57,20 +54,16 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
       return;
     }
     
-    // Check if adding these entries would exceed the limit
     if (entries.length + newEntries.length > MAX_ENTRIES) {
       toast.error(`Cannot add ${newEntries.length} entries. Maximum ${MAX_ENTRIES} entries allowed (${MAX_ENTRIES - entries.length} remaining)`);
       return;
     }
     
-    // Check for duplicates
     const duplicates = newEntries.filter(entry => entries.includes(entry));
     
-    // Add unique entries
     const uniqueEntries = newEntries.filter(entry => !entries.includes(entry));
     setEntries([...entries, ...uniqueEntries]);
     
-    // Provide feedback
     if (uniqueEntries.length > 0) {
       toast.success(`Added ${uniqueEntries.length} new entries`);
     }
@@ -205,7 +198,7 @@ const EntryManager: React.FC<EntryManagerProps> = ({ entries, setEntries }) => {
           {entries.map((entry, index) => (
             <div 
               key={index}
-              className="bg-secondary/30 text-white px-3 py-1.5 rounded-full flex items-center text-sm"
+              className="bg-pink-500/30 text-white px-3 py-1.5 rounded-full flex items-center text-sm"
             >
               <span className="mr-2">{entry}</span>
               <button 
