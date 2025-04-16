@@ -4,7 +4,7 @@ import {
   SmilePlus, 
   Pencil, 
   Zap, 
-  GridDots, 
+  Grid, 
   LineChart, 
   Text,
   Factory,
@@ -253,7 +253,7 @@ export const games: Game[] = [
     gradientBg: 'linear-gradient(135deg, #6C5CE7, #a8c0ff)',
     icon: (
       <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
-        <GridDots size={36} className="text-white" />
+        <Grid size={36} className="text-white" />
       </div>
     ),
     visualEffect: (
