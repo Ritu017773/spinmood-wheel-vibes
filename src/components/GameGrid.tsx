@@ -22,7 +22,7 @@ const GameGrid = () => {
           >
             <div className="relative h-full w-full rounded-2xl overflow-hidden p-6 flex flex-col justify-between backdrop-blur-sm bg-black/5">
               {/* Game Icon */}
-              <div className="absolute right-6 top-6 w-16 h-16 md:w-24 md:h-24">
+              <div className="absolute right-6 top-6 w-16 h-16 md:w-24 md:h-24 animate-pulse-slow">
                 {game.icon}
               </div>
               
@@ -53,7 +53,7 @@ const GameGrid = () => {
               {/* Hover Indicator */}
               <div className="absolute bottom-6 right-6 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full opacity-0 transform translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
                 <span className="font-bold text-white text-sm md:text-base" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
-                  Play Now
+                  Play Now →
                 </span>
               </div>
             </div>
