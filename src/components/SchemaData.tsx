@@ -1,359 +1,280 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { games } from '@/data/games';
 
-const SchemaData: React.FC = () => {
+const SchemaData = () => {
   const location = useLocation();
-  const currentPath = location.pathname;
+  const isHomePage = location.pathname === '/';
+  const isGamesPage = location.pathname === '/games';
   
-  useEffect(() => {
-    // Remove any existing schema data
-    const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
-    existingSchemas.forEach(script => {
-      document.head.removeChild(script);
-    });
-    
-    // WebApp Schema - for all pages
-    const webAppSchema = document.createElement('script');
-    webAppSchema.type = 'application/ld+json';
-    webAppSchema.innerHTML = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebApplication',
-      'name': 'SpinMood - Free Online Spinner Wheel',
-      'description': 'The ultimate free online spinner wheel for giveaways, decisions, study, parties, and fun activities. Highly customizable and easy to use.',
-      'applicationCategory': 'UtilityApplication',
-      'operatingSystem': 'All',
-      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
-      'url': window.location.origin,
-      'aggregateRating': {
-        '@type': 'AggregateRating',
-        'ratingValue': '4.9',
-        'reviewCount': '238'
-      }
-    });
-    document.head.appendChild(webAppSchema);
-    
-    // Website Schema - for all pages
-    const websiteSchema = document.createElement('script');
-    websiteSchema.type = 'application/ld+json';
-    websiteSchema.innerHTML = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      'name': 'SpinMood',
-      'url': window.location.origin,
-      'description': 'The best free online spinner wheel for giveaways, classrooms, study, parties & fun.',
-      'potentialAction': {
-        '@type': 'SearchAction',
-        'target': `${window.location.origin}/?q={search_term_string}`,
-        'query-input': 'required name=search_term_string'
-      }
-    });
-    document.head.appendChild(websiteSchema);
-    
-    // Page-specific schema
-    if (currentPath === '/') {
-      // FAQ Schema - only on homepage
-      const faqSchema = document.createElement('script');
-      faqSchema.type = 'application/ld+json';
-      faqSchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        'mainEntity': [
-          {
-            '@type': 'Question',
-            'name': 'How does SpinMood\'s wheel spinner work?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'SpinMood uses a mathematically fair random algorithm to determine the winner. Simply add your entries, customize your wheel theme, and click spin. The wheel will randomly select one entry when it stops spinning.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'Is SpinMood free to use?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'Yes! SpinMood is completely free with no limitations. You can use it for classrooms, giveaways, decision-making, or just for fun without any cost.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'How is SpinMood better than WheelofNames or PickerWheel?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'SpinMood offers mood-based themes with matching animations and sound effects, is more visually premium, loads faster, and is optimized for all devices. Our spinner is designed to be the most user-friendly wheel spinner available online.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'Can I use SpinMood for Instagram giveaways?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'Absolutely! SpinMood is perfect for social media giveaways. Just add your participant names or entries, choose the Party theme for added excitement, and spin to select a winner fairly and dramatically.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'Can I customize the spinner wheel?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'Yes! You can add any text entries you want (up to 40), choose from our four mood themes (Study, Chill, Party, Gift), and toggle sound effects on or off to match your preferences or environment.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'How many names can I add to the spinner wheel?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'SpinMood supports up to 40 custom names on your spinner wheel. Each name will be displayed clearly with its own unique color segment on the wheel.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'Is SpinMood suitable for classroom use?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'Absolutely! Many teachers use SpinMood for randomly selecting students, assigning tasks, creating engaging review games, or making classroom decisions more fun and fair.' 
-            }
-          },
-          {
-            '@type': 'Question',
-            'name': 'How do I share my SpinMood wheel with others?',
-            'acceptedAnswer': { 
-              '@type': 'Answer', 
-              'text': 'Currently, you can take a screenshot or screen recording of your wheel to share with others. We\'re working on adding direct sharing functionality in the future!' 
-            }
-          }
-        ]
-      });
-      document.head.appendChild(faqSchema);
-      
-      // Tool Schema - only on homepage
-      const toolSchema = document.createElement('script');
-      toolSchema.type = 'application/ld+json';
-      toolSchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
-        'name': 'SpinMood Spinner Wheel',
-        'applicationCategory': 'UtilitiesApplication',
-        'operatingSystem': 'Web',
-        'description': 'Free online spinner wheel for random selection, giveaways, decisions, and educational activities.',
-        'offers': {
-          '@type': 'Offer',
-          'price': '0',
-          'priceCurrency': 'USD'
-        },
-        'aggregateRating': {
-          '@type': 'AggregateRating',
-          'ratingValue': '4.9',
-          'ratingCount': '238',
-          'bestRating': '5',
-          'worstRating': '1'
-        }
-      });
-      document.head.appendChild(toolSchema);
-      
-    } else if (currentPath === '/privacy-policy') {
-      // Privacy Policy Schema
-      const privacySchema = document.createElement('script');
-      privacySchema.type = 'application/ld+json';
-      privacySchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        'name': 'SpinMood Privacy Policy | Your Data Protection',
-        'description': 'Read SpinMood\'s official privacy policy. Understand how we handle your data when using our free online spinner wheel and games.',
-        'url': `${window.location.origin}/privacy-policy`,
-        'mainEntity': {
-          '@type': 'Article',
-          'name': 'SpinMood Privacy Policy',
-          'headline': 'SpinMood Privacy Policy | Your Data Protection',
-          'author': {
-            '@type': 'Organization',
-            'name': 'SpinMood'
-          },
-          'publisher': {
-            '@type': 'Organization',
-            'name': 'SpinMood',
-            'logo': {
-              '@type': 'ImageObject',
-              'url': `${window.location.origin}/favicon.svg`
-            }
-          },
-          'datePublished': '2025-04-14',
-          'dateModified': '2025-04-15'
-        }
-      });
-      document.head.appendChild(privacySchema);
-      
-    } else if (currentPath === '/terms-conditions') {
-      // Terms Schema
-      const termsSchema = document.createElement('script');
-      termsSchema.type = 'application/ld+json';
-      termsSchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        'name': 'SpinMood Terms & Conditions | Website Usage Rules',
-        'description': 'Review the Terms and Conditions for using the SpinMood website, including our free spinner wheel and online games.',
-        'url': `${window.location.origin}/terms-conditions`,
-        'mainEntity': {
-          '@type': 'Article',
-          'name': 'SpinMood Terms and Conditions',
-          'headline': 'SpinMood Terms & Conditions | Website Usage Rules',
-          'author': {
-            '@type': 'Organization',
-            'name': 'SpinMood'
-          },
-          'publisher': {
-            '@type': 'Organization',
-            'name': 'SpinMood',
-            'logo': {
-              '@type': 'ImageObject',
-              'url': `${window.location.origin}/favicon.svg`
-            }
-          },
-          'datePublished': '2025-04-14',
-          'dateModified': '2025-04-15'
-        }
-      });
-      document.head.appendChild(termsSchema);
-      
-    } else if (currentPath === '/contact') {
-      // Contact Schema
-      const contactSchema = document.createElement('script');
-      contactSchema.type = 'application/ld+json';
-      contactSchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'ContactPage',
-        'name': 'Contact SpinMood Support',
-        'description': 'Get support or provide feedback for the SpinMood free online spinner wheel and games.',
-        'url': `${window.location.origin}/contact`,
-        'mainEntity': {
-          '@type': 'WebPage',
-          '@id': `${window.location.origin}/contact`
-        },
-        'publisher': {
-          '@type': 'Organization',
-          'name': 'SpinMood',
-          'logo': {
-            '@type': 'ImageObject',
-            'url': `${window.location.origin}/favicon.svg`
-          },
-          'contactPoint': {
-            '@type': 'ContactPoint',
-            'email': 'admin@spinmood.com',
-            'contactType': 'customer service'
-          }
-        }
-      });
-      document.head.appendChild(contactSchema);
-    } else if (currentPath === '/games') {
-      // Collection Page Schema for Games
-      const gamesSchema = document.createElement('script');
-      gamesSchema.type = 'application/ld+json';
-      
-      const gamesSchemaData = {
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        'name': 'SpinMood Games | Fun & Addictive Online Web Games',
-        'description': 'Explore unique and engaging web games on SpinMood! From quick reaction tests to creative challenges. Play free online games now.',
-        'url': `${window.location.origin}/games`,
-        'mainEntity': {
-          '@type': 'ItemList',
-          'itemListElement': games.map((game, index) => ({
-            '@type': 'ListItem',
-            'position': index + 1,
-            'item': {
-              '@type': 'Game',
-              'name': game.name,
-              'url': `${window.location.origin}${game.url}`,
-              'image': `${window.location.origin}${game.imageUrl}`,
-              'description': game.description,
-              'applicationCategory': 'Game',
-              'genre': game.category,
-              'keywords': game.keywords.join(', '),
-              'offers': {
-                '@type': 'Offer',
-                'price': '0',
-                'priceCurrency': 'USD'
-              }
-            }
-          }))
-        }
-      };
-      
-      gamesSchema.innerHTML = JSON.stringify(gamesSchemaData);
-      document.head.appendChild(gamesSchema);
+  // Base URL for the website
+  const baseUrl = 'https://spinmood.com';
+  
+  // Main schema for WebApp
+  const webAppSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    'name': 'SpinMood - Free Online Spinner Wheel & Games',
+    'description': 'The ultimate free online spinner wheel for giveaways, decisions, study, parties, and fun activities with additional interactive games. Highly customizable and easy to use.',
+    'applicationCategory': 'UtilityApplication',
+    'operatingSystem': 'All',
+    'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
+    'url': baseUrl,
+    'screenshot': {
+      '@type': 'ImageObject',
+      'url': `${baseUrl}/screenshot.png`,
+      'width': '1200',
+      'height': '630'
     }
-    
-    // Add breadcrumb schema for all pages except homepage
-    if (currentPath !== '/') {
-      const pathSegments = currentPath.split('/').filter(segment => segment);
-      const breadcrumbItems = [
+  };
+  
+  // Schema for Games Collection Page
+  const gamesCollectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': 'SpinMood Online Games',
+    'description': 'Play fun, engaging, and unique free online games on SpinMood.',
+    'url': `${baseUrl}/games`,
+    'mainEntity': {
+      '@type': 'ItemList',
+      'itemListElement': [
         {
           '@type': 'ListItem',
           'position': 1,
-          'name': 'Home',
-          'item': window.location.origin
+          'item': {
+            '@type': 'Game',
+            'name': 'Color Cascade',
+            'url': `${baseUrl}/games/color-cascade`,
+            'description': 'Test your reflexes by matching cascading color blocks. How many can you catch?',
+            'applicationCategory': 'Game',
+            'genre': 'Arcade, Reflex',
+            'keywords': 'color matching game, falling blocks game, reflex testing game',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'item': {
+            '@type': 'Game',
+            'name': 'Emoji Evolution',
+            'url': `${baseUrl}/games/emoji-evolution`,
+            'description': 'Combine different emojis to evolve and discover new, unexpected combinations!',
+            'applicationCategory': 'Game',
+            'genre': 'Puzzle',
+            'keywords': 'emoji game, merge emojis, evolution game',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'item': {
+            '@type': 'Game',
+            'name': 'Pixel Painter',
+            'url': `${baseUrl}/games/pixel-painter`,
+            'description': 'Paint and design with pixels. Create retro-style artwork one block at a time.',
+            'applicationCategory': 'Game',
+            'genre': 'Creative',
+            'keywords': 'pixel art, digital painting, creative game',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 4,
+          'item': {
+            '@type': 'Game',
+            'name': 'Reaction Race',
+            'url': `${baseUrl}/games/reaction-race`,
+            'description': 'Challenge your reaction speed with this fast-paced timing game.',
+            'applicationCategory': 'Game',
+            'genre': 'Arcade, Reflex',
+            'keywords': 'reaction game, speed test, reflex challenge',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 5,
+          'item': {
+            '@type': 'Game',
+            'name': 'Pattern Pop',
+            'url': `${baseUrl}/games/pattern-pop`,
+            'description': 'Test your memory by recreating increasingly complex patterns.',
+            'applicationCategory': 'Game',
+            'genre': 'Brain, Memory',
+            'keywords': 'pattern memory, sequence game, brain training',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 6,
+          'item': {
+            '@type': 'Game',
+            'name': 'Lucky Line',
+            'url': `${baseUrl}/games/lucky-line`,
+            'description': 'Create the perfect line to connect points and solve puzzles.',
+            'applicationCategory': 'Game',
+            'genre': 'Puzzle',
+            'keywords': 'line drawing game, puzzle solver, path finding',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 7,
+          'item': {
+            '@type': 'Game',
+            'name': 'Word Chain Reaction',
+            'url': `${baseUrl}/games/word-chain`,
+            'description': 'Create chains of related words. How long can you keep the sequence going?',
+            'applicationCategory': 'Game',
+            'genre': 'Word, Educational',
+            'keywords': 'word game, vocabulary builder, chain reaction',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 8,
+          'item': {
+            '@type': 'Game',
+            'name': 'Infinite Craft',
+            'url': `${baseUrl}/games/infinite-craft`,
+            'description': 'Mix and match basic elements to discover new combinations in this endless crafting game.',
+            'applicationCategory': 'Game',
+            'genre': 'Puzzle, Creative',
+            'keywords': 'crafting game, element combinations, discovery game',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
+        },
+        {
+          '@type': 'ListItem',
+          'position': 9,
+          'item': {
+            '@type': 'Game',
+            'name': 'The Password Game',
+            'url': `${baseUrl}/games/password-game`,
+            'description': 'Follow increasingly absurd rules to create the perfect password in this hilarious challenge.',
+            'applicationCategory': 'Game',
+            'genre': 'Puzzle, Humor',
+            'keywords': 'password challenge, security game, puzzle game',
+            'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+          }
         }
-      ];
-      
-      // Add current page to breadcrumb
-      let pageName = '';
-      if (currentPath === '/privacy-policy') pageName = 'Privacy Policy';
-      else if (currentPath === '/terms-conditions') pageName = 'Terms & Conditions';
-      else if (currentPath === '/contact') pageName = 'Contact Us';
-      else if (currentPath === '/games') pageName = 'Games Collection';
-      else pageName = pathSegments[pathSegments.length - 1].replace(/-/g, ' ');
-      
-      breadcrumbItems.push({
-        '@type': 'ListItem',
-        'position': 2,
-        'name': pageName,
-        'item': `${window.location.origin}${currentPath}`
-      });
-      
-      const breadcrumbSchema = document.createElement('script');
-      breadcrumbSchema.type = 'application/ld+json';
-      breadcrumbSchema.innerHTML = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        'itemListElement': breadcrumbItems
-      });
-      document.head.appendChild(breadcrumbSchema);
+      ]
     }
-    
-    // Organization Schema - for all pages
-    const organizationSchema = document.createElement('script');
-    organizationSchema.type = 'application/ld+json';
-    organizationSchema.innerHTML = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      'name': 'SpinMood',
-      'url': window.location.origin,
-      'logo': `${window.location.origin}/favicon.svg`,
-      'sameAs': [
-        'https://twitter.com/spinmood',
-        'https://www.facebook.com/spinmood',
-        'https://www.instagram.com/spinmood'
-      ],
-      'contactPoint': {
-        '@type': 'ContactPoint',
-        'telephone': '',
-        'email': 'admin@spinmood.com',
-        'contactType': 'customer service'
-      }
-    });
-    document.head.appendChild(organizationSchema);
-    
-    return () => {
-      const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-      scripts.forEach(script => {
-        document.head.removeChild(script);
-      });
-    };
-  }, [currentPath]);
+  };
+  
+  // Organization schema
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'SpinMood',
+    'url': baseUrl,
+    'logo': `${baseUrl}/favicon.svg`,
+    'sameAs': [
+      'https://twitter.com/spinmood',
+      'https://www.facebook.com/spinmood',
+      'https://www.instagram.com/spinmood'
+    ]
+  };
 
-  return null;
+  // FAQ schema
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'How does SpinMood's wheel spinner work?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'SpinMood uses a mathematically fair random algorithm to ensure each entry on the wheel has an equal chance of winning. Simply add your entries, customize the look if you want, and hit the spin button!' 
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Is SpinMood free to use?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'Yes, SpinMood is completely free to use, with all features available at no cost. This includes our spinner wheel and all our games.' 
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Can I customize the spinner wheel?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'Absolutely! You can customize the spinner with different themes (Study, Chill, Party, Gift, or Custom), change colors, add as many entries as you want (up to 40), and enable/disable sound effects.' 
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'How do I use SpinMood for a giveaway?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'For giveaways, simply enter all participant names or entry numbers into the spinner, choose a theme that matches your event, and spin! The confetti animation makes winner announcements exciting and engaging.' 
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'What types of games does SpinMood offer?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'SpinMood offers a variety of fun web games including Color Cascade, Emoji Evolution, Pixel Painter, Reaction Race, Pattern Pop, Lucky Line, Word Chain Reaction, and more - all free to play directly in your browser.' 
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Is SpinMood safe for classrooms?',
+        'acceptedAnswer': { 
+          '@type': 'Answer', 
+          'text': 'Yes! SpinMood is perfectly suited for classroom use. Teachers love our spinner for selecting students randomly, assigning tasks, creating groups, and making learning more engaging. All our games are also appropriate for educational settings.' 
+        }
+      }
+    ]
+  };
+
+  // Determine which schema to render based on current page
+  const renderSchema = () => {
+    if (isHomePage) {
+      return (
+        <>
+          <script type="application/ld+json">
+            {JSON.stringify(webAppSchema)}
+          </script>
+          <script type="application/ld+json">
+            {JSON.stringify(organizationSchema)}
+          </script>
+          <script type="application/ld+json">
+            {JSON.stringify(faqSchema)}
+          </script>
+        </>
+      );
+    } else if (isGamesPage) {
+      return (
+        <>
+          <script type="application/ld+json">
+            {JSON.stringify(gamesCollectionSchema)}
+          </script>
+          <script type="application/ld+json">
+            {JSON.stringify(organizationSchema)}
+          </script>
+        </>
+      );
+    } else {
+      // Other pages just get the organization schema
+      return (
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+      );
+    }
+  };
+
+  return <>{renderSchema()}</>;
 };
 
 export default SchemaData;

@@ -52,9 +52,9 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
 
   // Effect to draw wheel when entries or theme changes
   useEffect(() => {
-    if (theme === 'custom' && entries.length >= 2) {
-      // For the custom theme, use canvas for better rendering
-      drawCustomWheelOnCanvas();
+    if (entries.length >= 2) {
+      // Always use canvas for better rendering
+      drawWheelOnCanvas();
     }
   }, [entries, theme]);
 
@@ -89,7 +89,7 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
     };
   }, [isSpinning, entries.length, rotationDeg, scale]);
 
-  const drawCustomWheelOnCanvas = () => {
+  const drawWheelOnCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -142,27 +142,66 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
       
       // Calculate text position
       const midAngle = startAngle + (anglePerSlice / 2);
-      const textRadius = radius * 0.75; // Position text at 75% of radius
+      
+      // For better readability, position text at varying distances based on number of entries
+      let textRadiusRatio = 0.65;
+      
+      // Adjust text radius based on number of entries for optimal readability
+      if (numEntries > 30) textRadiusRatio = 0.80;
+      else if (numEntries > 20) textRadiusRatio = 0.75;
+      else if (numEntries > 10) textRadiusRatio = 0.70;
+      
+      const textRadius = radius * textRadiusRatio; 
       const textX = centerX + Math.cos(midAngle) * textRadius;
       const textY = centerY + Math.sin(midAngle) * textRadius;
+      
+      // Adjust text rotation for optimal readability
+      // For entries in the top half, rotate text to be readable from the outside
+      // For entries in the bottom half, rotate text to be readable from the inside
+      let textRotationAngle = midAngle;
+      if (midAngle > Math.PI / 2 && midAngle < Math.PI * 1.5) {
+        textRotationAngle += Math.PI;
+      }
       
       // Set text properties
       ctx.save();
       ctx.translate(textX, textY);
-      ctx.rotate(midAngle + Math.PI / 2); // Rotate text
+      ctx.rotate(textRotationAngle);
       
       // Adaptive font size based on number of entries
-      const fontSize = getFontSize();
+      const fontSize = getFontSize(numEntries);
+      
+      // Enhanced text styling for better readability
       ctx.font = `bold ${fontSize} Arial, sans-serif`;
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       
-      // Add text stroke for better readability
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      // Add text stroke/shadow for better readability against all background colors
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 3;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
       ctx.lineWidth = 2;
-      ctx.strokeText(entries[i], 0, 0);
-      ctx.fillText(entries[i], 0, 0);
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      
+      // Set maximum text length based on wheel size and number of entries
+      const maxTextLength = Math.floor(2 * Math.PI * textRadius / numEntries * 0.7);
+      let displayText = entries[i];
+      
+      // Truncate text if it's too long
+      if (ctx.measureText(displayText).width > maxTextLength) {
+        // Try to find a good breaking point
+        let truncatedLength = Math.floor(displayText.length * (maxTextLength / ctx.measureText(displayText).width));
+        // Ensure we don't cut in the middle of a word if possible
+        let breakPoint = displayText.lastIndexOf(' ', truncatedLength);
+        if (breakPoint === -1 || breakPoint < truncatedLength * 0.7) breakPoint = truncatedLength;
+        displayText = displayText.substring(0, breakPoint) + '...';
+      }
+      
+      // Draw text with stroke for better visibility
+      ctx.strokeText(displayText, 0, 0);
+      ctx.fillText(displayText, 0, 0);
       
       ctx.restore();
     }
@@ -309,8 +348,10 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
         lightness = 52 + (index % 7) * 3;
         break;
       default:
-        saturation = 70 + (index % 5) * 5;
-        lightness = 50 + (index % 7) * 3;
+        // For custom theme, use more vivid and distinct colors
+        hue = (index * (360 / totalEntries)) % 360;
+        saturation = 80;
+        lightness = 55;
     }
     
     // Ensure lightness isn't too high (too pale) or too low (too dark) for text readability
@@ -320,86 +361,15 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
   };
 
   // Dynamic font sizing based on number of entries
-  const getFontSize = () => {
-    if (entries.length > 35) return '0.65rem';
-    if (entries.length > 30) return '0.7rem';
-    if (entries.length > 25) return '0.75rem';
-    if (entries.length > 20) return '0.8rem';
-    if (entries.length > 15) return '0.9rem';
-    if (entries.length > 10) return '1rem';
-    return '1.1rem';
-  };
-
-  // Enhanced text shadow for better readability
-  const getTextShadow = () => {
-    return '0 0 2px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.9)';
-  };
-  
-  // Function to render custom wheel segments with better text positioning
-  const renderCustomSegments = () => {
-    const isCustomTheme = theme === 'custom';
-    
-    if (isCustomTheme) {
-      // For custom theme, use canvas
-      return (
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full rounded-full"
-        />
-      );
-    }
-    
-    return entries.map((entry, index) => {
-      const sliceSizeDegrees = 360 / entries.length;
-      const rotation = index * sliceSizeDegrees;
-      // Calculate skew angle based on entry count to ensure proper segment shape
-      const skew = entries.length <= 2 ? 0 : (90 - sliceSizeDegrees);
-      
-      const segmentColor = getSegmentColor(index, entries.length);
-      const isHighlighted = index === hoverSlice;
-      const fontSize = getFontSize();
-      const textShadow = getTextShadow();
-      
-      // Calculate optimal text rotation angle based on segment size
-      const textRotateAngle = sliceSizeDegrees / 2;
-      
-      // Improved text styling for better readability
-      const textStyles = {
-        transform: `rotate(${textRotateAngle}deg) skew(${-skew}deg)`,
-        width: entries.length > 20 ? '150%' : '120%',
-        left: entries.length > 20 ? '-10%' : '-5%',
-        bottom: '5%',
-        fontSize: fontSize,
-        fontWeight: 700,
-        textShadow: textShadow,
-        WebkitTextStroke: entries.length > 25 ? '0.3px white' : 'none',
-        color: 'white'
-      };
-      
-      return (
-        <div
-          key={index}
-          className="absolute top-0 right-0 w-1/2 h-1/2 origin-bottom-left text-white transition-opacity duration-300"
-          style={{
-            transform: `rotate(${rotation}deg) skew(${skew}deg)`,
-            background: segmentColor,
-            opacity: isHighlighted ? 0.8 : 1,
-            boxShadow: isHighlighted ? 'inset 0 0 15px rgba(255,255,255,0.3)' : 'none'
-          }}
-          onMouseEnter={() => sliceHoverHandler(index)}
-          onMouseLeave={() => sliceHoverHandler(null)}
-        >
-          <div 
-            className="absolute flex items-center justify-center truncate"
-            style={textStyles}
-          >
-            <span className="truncate max-w-full inline-block">
-              {entry}
-            </span>
-          </div>
-        </div>
-      );
-    });
+  const getFontSize = (numEntries: number) => {
+    if (numEntries > 35) return '10px';
+    if (numEntries > 30) return '11px';
+    if (numEntries > 25) return '12px';
+    if (numEntries > 20) return '13px';
+    if (numEntries > 15) return '14px';
+    if (numEntries > 10) return '15px';
+    if (numEntries > 5) return '16px';
+    return '18px';
   };
 
   return (
@@ -417,8 +387,11 @@ const SpinnerWheel: React.FC<SpinnerWheelProps> = ({
           }}
           onClick={handleSpin}
         >
-          {/* Render spinner segments */}
-          {renderCustomSegments()}
+          {/* Use canvas for all themes for better text rendering */}
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full rounded-full"
+          />
 
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none rounded-full"></div>
