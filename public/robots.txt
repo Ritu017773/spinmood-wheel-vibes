@@ -5,6 +5,11 @@ Allow: /
 # Priority pages for crawling
 Sitemap: https://spinmood.com/sitemap.xml
 
+# Spinner wheel & main pages - highest priority
+Allow: /$
+Allow: /games$
+Allow: /games/*
+
 # Allow Google to index everything with high priority
 User-agent: Googlebot
 Allow: /
@@ -33,6 +38,11 @@ Allow: /
 
 User-agent: PinterestBot
 Allow: /
+
+# Page specific priorities
+Allow: /privacy-policy
+Allow: /terms-conditions
+Allow: /contact
 
 # Game pages - high priority
 Allow: /games

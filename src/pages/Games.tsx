@@ -13,12 +13,12 @@ const Games = () => {
     <Providers>
       <div className="min-h-screen flex flex-col text-foreground">
         <Helmet>
-          <title>Fun Online Games & Interactive Tools | SpinMood Games Collection</title>
+          <title>SpinMood Games | Fun & Addictive Online Web Games</title>
           <meta 
             name="description" 
-            content="Discover SpinMood's collection of free online games and interactive tools. From the Mood Spinner to Memory Mirage, find engaging activities for entertainment, decision-making, and fun!" 
+            content="Explore unique and engaging web games on SpinMood! From quick reaction tests to creative challenges. Play free online games now." 
           />
-          <meta name="keywords" content="free online games, interactive web games, mood spinner game, memory mirage game, vibe architect, echo choice game, color cascade game, mind loop game, whisper clicker, fun decision tools" />
+          <meta name="keywords" content="free online games, interactive web games, mood spinner game, memory mirage game, vibe architect, echo choice game, color cascade game, mind loop game, whisper clicker game, fun decision tools, pixel painter, reaction race, pattern pop, lucky line, word chain reaction, infinite craft, password game" />
           <link rel="canonical" href="https://spinmood.com/games" />
         </Helmet>
         

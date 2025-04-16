@@ -160,8 +160,8 @@ const SchemaData: React.FC = () => {
       privacySchema.innerHTML = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        'name': 'SpinMood Privacy Policy',
-        'description': 'Read SpinMood\'s official privacy policy. Understand how we handle your data when using our free online spinner wheel.',
+        'name': 'SpinMood Privacy Policy | Your Data Protection',
+        'description': 'Read SpinMood\'s official privacy policy. Understand how we handle your data when using our free online spinner wheel and games.',
         'url': `${window.location.origin}/privacy-policy`,
         'mainEntity': {
           '@type': 'Article',
@@ -192,13 +192,13 @@ const SchemaData: React.FC = () => {
       termsSchema.innerHTML = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        'name': 'SpinMood Terms and Conditions',
-        'description': 'SpinMood\'s terms and conditions for using our free online spinner wheel tool.',
+        'name': 'SpinMood Terms & Conditions | Website Usage Rules',
+        'description': 'Review the Terms and Conditions for using the SpinMood website, including our free spinner wheel and online games.',
         'url': `${window.location.origin}/terms-conditions`,
         'mainEntity': {
           '@type': 'Article',
           'name': 'SpinMood Terms and Conditions',
-          'headline': 'SpinMood Terms & Conditions | Usage Agreement',
+          'headline': 'SpinMood Terms & Conditions | Website Usage Rules',
           'author': {
             '@type': 'Organization',
             'name': 'SpinMood'
@@ -225,7 +225,7 @@ const SchemaData: React.FC = () => {
         '@context': 'https://schema.org',
         '@type': 'ContactPage',
         'name': 'Contact SpinMood Support',
-        'description': 'Get support or provide feedback for the SpinMood free online spinner wheel.',
+        'description': 'Get support or provide feedback for the SpinMood free online spinner wheel and games.',
         'url': `${window.location.origin}/contact`,
         'mainEntity': {
           '@type': 'WebPage',
@@ -254,31 +254,31 @@ const SchemaData: React.FC = () => {
       const gamesSchemaData = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        'name': 'SpinMood Games Collection',
-        'description': 'Explore SpinMood\'s collection of free online games and interactive tools for decision making, entertainment and fun.',
+        'name': 'SpinMood Games | Fun & Addictive Online Web Games',
+        'description': 'Explore unique and engaging web games on SpinMood! From quick reaction tests to creative challenges. Play free online games now.',
         'url': `${window.location.origin}/games`,
-        'mainEntity': games.map(game => ({
-          '@type': 'SoftwareApplication',
-          'applicationCategory': 'Game',
-          'applicationSubCategory': game.category,
-          'name': game.name,
-          'description': game.description,
-          'url': `${window.location.origin}${game.url}`,
-          'image': `${window.location.origin}${game.imageUrl}`,
-          'offers': {
-            '@type': 'Offer',
-            'price': '0',
-            'priceCurrency': 'USD'
-          },
-          'aggregateRating': {
-            '@type': 'AggregateRating',
-            'ratingValue': '4.8',
-            'ratingCount': '68',
-            'bestRating': '5',
-            'worstRating': '1'
-          },
-          'keywords': game.keywords.join(', ')
-        }))
+        'mainEntity': {
+          '@type': 'ItemList',
+          'itemListElement': games.map((game, index) => ({
+            '@type': 'ListItem',
+            'position': index + 1,
+            'item': {
+              '@type': 'Game',
+              'name': game.name,
+              'url': `${window.location.origin}${game.url}`,
+              'image': `${window.location.origin}${game.imageUrl}`,
+              'description': game.description,
+              'applicationCategory': 'Game',
+              'genre': game.category,
+              'keywords': game.keywords.join(', '),
+              'offers': {
+                '@type': 'Offer',
+                'price': '0',
+                'priceCurrency': 'USD'
+              }
+            }
+          }))
+        }
       };
       
       gamesSchema.innerHTML = JSON.stringify(gamesSchemaData);
