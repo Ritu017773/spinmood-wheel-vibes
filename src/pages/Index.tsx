@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 import Providers from '@/components/Providers';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -29,10 +30,21 @@ const Index = () => {
   } = useSpinnerState();
 
   const spinnerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const scrollToSpinner = () => {
     spinnerRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  // Check location state for scrollToSpinner flag when coming from other pages
+  useEffect(() => {
+    if (location.state && location.state.scrollToSpinner) {
+      // Allow a slight delay for the page to render before scrolling
+      setTimeout(() => {
+        scrollToSpinner();
+      }, 100);
+    }
+  }, [location.state]);
   
   // Apply theme class to document body
   useEffect(() => {

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -84,11 +83,14 @@ export const useSpinnerState = () => {
       container.appendChild(confetti);
     }
     
-    // No need for a fixed timeout anymore - cleanup will happen when modal closes
+    // Fixed 3-second duration for confetti display, regardless of modal state
+    setTimeout(() => {
+      if (container && container.parentNode) {
+        container.parentNode.removeChild(container);
+      }
+      setConfettiContainer(null);
+    }, 3000);
   };
-  
-  // Update the useEffect in ResultModal that cleans up confetti when modal closes
-  // This effect will now be handled by the ResultModal component
   
   return {
     customEntries,

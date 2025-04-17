@@ -2,9 +2,23 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header = ({ onStartClick }: { onStartClick: () => void }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Enhanced onStartClick handler that works from any page
+  const handleStartClick = () => {
+    // If not on homepage, navigate there first and then scroll to spinner
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollToSpinner: true } });
+    } else {
+      // If already on homepage, just scroll to spinner
+      onStartClick();
+    }
+  };
+  
   return (
     <header className="w-full py-4 px-4 sm:px-6 flex justify-between items-center backdrop-blur-sm bg-background/80 border-b border-white/10 sticky top-0 z-50">
       <div className="flex items-center space-x-3">
@@ -64,7 +78,7 @@ const Header = ({ onStartClick }: { onStartClick: () => void }) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
-              onClick={onStartClick}
+              onClick={handleStartClick}
               className="bg-primary hover:bg-primary/90 text-primary-foreground glow font-bold"
             >
               Start Spinning
