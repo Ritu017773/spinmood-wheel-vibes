@@ -39,11 +39,28 @@ const ResultModal: React.FC<ResultModalProps> = ({
     }
   }, [isOpen, result]);
 
+  useEffect(() => {
+    // Clean up confetti when modal closes
+    return () => {
+      // Find and remove any confetti container that might be in the DOM
+      const confettiContainer = document.querySelector('div[style*="position: fixed"][style*="z-index: 9999"]');
+      if (confettiContainer && confettiContainer.parentNode) {
+        confettiContainer.parentNode.removeChild(confettiContainer);
+      }
+    };
+  }, []);
+
   const handleClose = () => {
     setAnimation('exiting');
     setTimeout(() => {
       onClose();
       setAnimation(null);
+      
+      // Clean up confetti container when the modal closes
+      const confettiContainer = document.querySelector('div[style*="position: fixed"][style*="z-index: 9999"]');
+      if (confettiContainer && confettiContainer.parentNode) {
+        confettiContainer.parentNode.removeChild(confettiContainer);
+      }
     }, 300);
   };
 

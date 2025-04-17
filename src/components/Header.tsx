@@ -47,6 +47,14 @@ const Header = ({ onStartClick }: { onStartClick: () => void }) => {
       
       <div className="flex items-center space-x-2 md:space-x-4">
         <Link 
+          to="/games/fart-hero" 
+          className="px-4 py-2 mr-1 rounded-md font-bold bg-green-600/40 backdrop-blur-sm hover:bg-green-600/60 transition-colors text-white"
+          style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}
+        >
+          Fart Hero
+        </Link>
+        
+        <Link 
           to="/games" 
           className="px-4 py-2 mr-2 rounded-md font-bold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors text-white"
           style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}

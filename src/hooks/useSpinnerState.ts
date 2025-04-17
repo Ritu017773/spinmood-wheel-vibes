@@ -16,6 +16,7 @@ export const useSpinnerState = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [currentResult, setCurrentResult] = useState<string | null>(null);
+  const [confettiContainer, setConfettiContainer] = useState<HTMLDivElement | null>(null);
 
   const handleSpinComplete = (winner: string) => {
     setCurrentResult(winner);
@@ -42,6 +43,9 @@ export const useSpinnerState = () => {
     container.style.pointerEvents = 'none';
     container.style.zIndex = '9999';
     document.body.appendChild(container);
+    
+    // Store the container reference so we can remove it when modal closes
+    setConfettiContainer(container);
     
     // Theme-based colors for confetti
     let colors: string[] = [];
@@ -80,11 +84,11 @@ export const useSpinnerState = () => {
       container.appendChild(confetti);
     }
     
-    // Increased duration for celebration display
-    setTimeout(() => {
-      document.body.removeChild(container);
-    }, 6000);
+    // No need for a fixed timeout anymore - cleanup will happen when modal closes
   };
+  
+  // Update the useEffect in ResultModal that cleans up confetti when modal closes
+  // This effect will now be handled by the ResultModal component
   
   return {
     customEntries,
@@ -98,6 +102,7 @@ export const useSpinnerState = () => {
     showResultModal,
     setShowResultModal,
     currentResult,
-    handleSpinComplete
+    handleSpinComplete,
+    confettiContainer
   };
 };

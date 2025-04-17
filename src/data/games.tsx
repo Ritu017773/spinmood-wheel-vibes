@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Palette, 
@@ -9,7 +8,12 @@ import {
   LineChart, 
   Text,
   Factory,
-  KeyRound
+  KeyRound,
+  Wind,
+  Puzzle,
+  Target,
+  Eye,
+  AlertTriangle
 } from 'lucide-react';
 
 interface Game {
@@ -27,6 +31,175 @@ interface Game {
 }
 
 export const games: Game[] = [
+  {
+    id: 'fart-hero',
+    name: 'FART HERO: LOVE RUN',
+    url: '/games/fart-hero',
+    shortDescription: 'Propel your hero with fart power',
+    description: 'Jump and fly using fart propulsion to dodge obstacles in this hilarious endless runner game.',
+    gradientBg: 'linear-gradient(135deg, #85D988, #3D944A)',
+    icon: (
+      <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
+        <Wind size={36} className="text-white" />
+      </div>
+    ),
+    visualEffect: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-white/20 animate-bounce">
+          <div className="relative w-full h-full">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-10 rounded-b-full bg-white/30"></div>
+            <div className="absolute top-1/4 left-1/3 w-2 h-2 rounded-full bg-white/70"></div>
+            <div className="absolute top-1/4 right-1/3 w-2 h-2 rounded-full bg-white/70"></div>
+            <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-4 h-1 rounded-full bg-white/70"></div>
+          </div>
+        </div>
+        <div className="absolute -bottom-4 w-32 h-8 opacity-30">
+          {Array.from({length: 6}).map((_, i) => (
+            <div 
+              key={i}
+              className="absolute left-1/2 bottom-0 w-8 h-2 bg-white/60 rounded-full"
+              style={{
+                transform: `translateX(-50%) rotate(${i * 30 - 75}deg)`,
+                opacity: 1 - i * 0.15
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+    ),
+    keywords: ['endless runner game', 'funny game', 'arcade game'],
+    category: 'Arcade Games',
+    imageUrl: '/assets/fart-hero-thumbnail.png'
+  },
+  {
+    id: 'bliss-machine',
+    name: 'BUILD YOUR BLISS MACHINE',
+    url: '/games/bliss-machine',
+    shortDescription: 'Create your perfect mood machine',
+    description: 'Drag abstract parts (colors, sounds, textures, words) onto a canvas to build a unique mood machine.',
+    gradientBg: 'linear-gradient(135deg, #9F7AEA, #4299E1)',
+    icon: (
+      <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
+        <Puzzle size={36} className="text-white" />
+      </div>
+    ),
+    visualEffect: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="grid grid-cols-2 gap-3">
+          {['#F687B3', '#4FD1C5', '#F6AD55', '#68D391'].map((color, i) => (
+            <div 
+              key={i}
+              className="w-10 h-10 rounded-md animate-pulse"
+              style={{
+                backgroundColor: color,
+                animationDelay: `${i * 0.2}s`,
+                animationDuration: `${2 + i * 0.5}s`
+              }}
+            ></div>
+          ))}
+        </div>
+        <div className="absolute w-full h-1/2 opacity-20">
+          <div className="relative w-full h-full">
+            <div className="absolute top-1/3 left-1/4 w-1/2 h-1 bg-white/80 rounded-full animate-ping"></div>
+            <div className="absolute bottom-1/3 right-1/4 w-1/3 h-1 bg-white/80 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+          </div>
+        </div>
+      </div>
+    ),
+    keywords: ['creative game', 'mood builder', 'abstract art'],
+    category: 'Creative Tools',
+    imageUrl: '/assets/bliss-machine-thumbnail.png'
+  },
+  {
+    id: 'perfect-test',
+    name: 'HOW PERFECT ARE YOU?',
+    url: '/games/perfect-test',
+    shortDescription: 'Test your precision and perfectionism',
+    description: 'Minimalist challenges testing your precision with tapping center points, judging colors, and perfect alignment.',
+    gradientBg: 'linear-gradient(135deg, #F6AD55, #ED8936)',
+    icon: (
+      <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
+        <Target size={36} className="text-white" />
+      </div>
+    ),
+    visualEffect: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-24 h-24">
+          <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
+          <div className="absolute inset-3 rounded-full border-4 border-white/30"></div>
+          <div className="absolute inset-6 rounded-full border-4 border-white/40"></div>
+          <div className="absolute inset-9 rounded-full border-4 border-white/50"></div>
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+            <div className="w-2 h-2 rounded-full bg-white/70 animate-ping"></div>
+          </div>
+        </div>
+      </div>
+    ),
+    keywords: ['precision game', 'perfectionism test', 'skill challenge'],
+    category: 'Brain Games',
+    imageUrl: '/assets/perfect-test-thumbnail.png'
+  },
+  {
+    id: 'blink-miss',
+    name: 'BLINK & MISS',
+    url: '/games/blink-miss',
+    shortDescription: 'Spot tiny changes before they vanish',
+    description: 'Can you spot tiny, brief changes on screen before they disappear? Test your observation skills.',
+    gradientBg: 'linear-gradient(135deg, #90CDF4, #4299E1)',
+    icon: (
+      <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
+        <Eye size={36} className="text-white" />
+      </div>
+    ),
+    visualEffect: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-32 h-32">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-8 border-t-4 border-b-4 border-white/40 rounded-full"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-4 h-4 rounded-full bg-white/60 animate-ping"></div>
+          </div>
+          <div className="absolute right-6 top-10 w-2 h-2 rounded-full bg-white/30 animate-pulse" style={{ animationDuration: '0.5s' }}></div>
+          <div className="absolute left-8 bottom-6 w-2 h-2 rounded-full bg-white/30 animate-pulse" style={{ animationDuration: '0.7s' }}></div>
+        </div>
+      </div>
+    ),
+    keywords: ['observation game', 'visual challenge', 'attention test'],
+    category: 'Brain Games',
+    imageUrl: '/assets/blink-miss-thumbnail.png'
+  },
+  {
+    id: 'speed-trap',
+    name: 'DON\'T BLINK: SPEED TRAP',
+    url: '/games/speed-trap',
+    shortDescription: 'Move slowly to avoid the traps',
+    description: 'Move your cursor extremely slowly towards the target while avoiding distractions and traps.',
+    gradientBg: 'linear-gradient(135deg, #FC8181, #E53E3E)',
+    icon: (
+      <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm p-2">
+        <AlertTriangle size={36} className="text-white" />
+      </div>
+    ),
+    visualEffect: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-full h-full">
+          <div className="absolute left-1/4 top-1/2 transform -translate-y-1/2 w-1/2 h-1 bg-white/30"></div>
+          <div className="absolute left-1/4 top-1/3 w-6 h-6 rounded-full border-2 border-white/40 flex items-center justify-center">
+            <div className="w-2 h-2 rounded-full bg-white/60"></div>
+          </div>
+          <div className="absolute right-1/4 top-2/3 w-6 h-6 rounded-full border-2 border-white/40 flex items-center justify-center">
+            <div className="w-2 h-2 rounded-full bg-white/60"></div>
+          </div>
+          <div className="absolute left-1/3 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white/20 animate-pulse"></div>
+          <div className="absolute left-1/2 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full border border-white/50"></div>
+        </div>
+      </div>
+    ),
+    keywords: ['patience game', 'focus challenge', 'cursor control'],
+    category: 'Brain Games',
+    imageUrl: '/assets/speed-trap-thumbnail.png'
+  },
   {
     id: 'color-cascade',
     name: 'COLOR CASCADE',
