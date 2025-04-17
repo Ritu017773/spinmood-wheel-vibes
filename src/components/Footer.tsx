@@ -112,11 +112,11 @@ const Footer = () => {
             </div>
           </div>
           
-          {/* Column 4: Games & Tools */}
+          {/* Column 4: Games & Tools - TRIMMED as requested */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-xl font-bold text-white mb-4" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>Games & Tools</h3>
             <div className="grid grid-cols-1 gap-3">
-              {gameCategories.map((category, index) => (
+              {gameCategories.slice(0, 2).map((category, index) => (
                 <div key={index} className="mb-2">
                   <h4 className="text-white text-lg font-bold flex items-center mb-1" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.2)' }}>
                     {category.name === 'Decision Tools' ? (
@@ -137,7 +137,8 @@ const Footer = () => {
                     {category.name}
                   </h4>
                   <div className="pl-6">
-                    {category.games.map((game, gameIndex) => (
+                    {/* Only show games up to Pattern Pop */}
+                    {category.games.slice(0, category.name === 'Brain Games' ? 4 : category.games.length).map((game, gameIndex) => (
                       <Link 
                         key={gameIndex}
                         to={game.url}
