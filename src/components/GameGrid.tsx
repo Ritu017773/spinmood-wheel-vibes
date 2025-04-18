@@ -1,9 +1,12 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { games } from '@/data/games';
+import { gameCategories } from '@/data/games';
 
 const GameGrid = () => {
+  // Extract all games from all categories into a flat array
+  const games = gameCategories.flatMap(category => category.games);
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
       {games.map((game) => (

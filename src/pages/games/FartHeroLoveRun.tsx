@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ const FartHeroLoveRun: React.FC = () => {
   const [highScore, setHighScore] = useState<number>(0);
   const navigate = useNavigate();
   
-  // Game objects
   const heroRef = useRef({
     x: 50,
     y: 0,
@@ -39,34 +37,29 @@ const FartHeroLoveRun: React.FC = () => {
     lastTimestamp: 0
   });
 
-  // Sound effects
   const soundsRef = useRef({
     fart: new Audio('/sounds/fart.mp3'),
     coin: new Audio('/sounds/coin.mp3'),
     crash: new Audio('/sounds/crash.mp3')
   });
   
-  // Load or initialize high score
   useEffect(() => {
     const savedHighScore = localStorage.getItem('fartHeroHighScore');
     if (savedHighScore) {
       setHighScore(parseInt(savedHighScore));
     }
     
-    // Preload sounds
     Object.values(soundsRef.current).forEach(sound => {
       sound.load();
     });
     
     return () => {
-      // Cleanup
       Object.values(soundsRef.current).forEach(sound => {
         sound.pause();
       });
     };
   }, []);
   
-  // Set up game
   useEffect(() => {
     if (!isPlaying) return;
     
@@ -79,26 +72,21 @@ const FartHeroLoveRun: React.FC = () => {
     const hero = heroRef.current;
     const gameState = gameStateRef.current;
     
-    // Set canvas dimensions
     canvas.width = 800;
     canvas.height = 400;
     
-    // Reset hero position
     hero.x = 50;
     hero.y = gameState.ground - hero.height;
     hero.velocity = 0;
     hero.isJumping = false;
     hero.fartCharge = 0;
     
-    // Reset game state
     gameState.coins = [];
     gameState.obstacles = [];
     gameState.scrollSpeed = 3 + (level - 1);
     
-    // Generate initial obstacles and coins
     generateLevel(level);
     
-    // Game loop
     let animationId: number;
     const gameLoop = (timestamp: number) => {
       if (!gameState.lastTimestamp) {
@@ -108,46 +96,35 @@ const FartHeroLoveRun: React.FC = () => {
       const deltaTime = timestamp - gameState.lastTimestamp;
       gameState.lastTimestamp = timestamp;
       
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw sky and ground
       drawBackground(ctx, canvas.width, canvas.height);
       
-      // Update and draw hero
       updateHero(deltaTime);
       drawHero(ctx);
       
-      // Update and draw obstacles
       updateObstacles();
       drawObstacles(ctx);
       
-      // Update and draw coins
       updateCoins();
       drawCoins(ctx);
       
-      // Check collisions
       checkCollisions();
       
-      // Draw score and lives
       drawUI(ctx);
       
-      // Continue game loop
       if (!gameOver) {
         animationId = requestAnimationFrame(gameLoop);
       }
     };
     
-    // Start game loop
     animationId = requestAnimationFrame(gameLoop);
     
-    // Cleanup
     return () => {
       cancelAnimationFrame(animationId);
     };
   }, [isPlaying, level, gameOver]);
   
-  // Handle keyboard input
   useEffect(() => {
     if (!isPlaying) return;
     
@@ -172,7 +149,6 @@ const FartHeroLoveRun: React.FC = () => {
     };
   }, [isPlaying]);
   
-  // Touch controls for mobile
   useEffect(() => {
     if (!isPlaying || !canvasRef.current) return;
     
@@ -196,19 +172,15 @@ const FartHeroLoveRun: React.FC = () => {
     };
   }, [isPlaying]);
   
-  // Generate game level
   const generateLevel = (level: number) => {
     const gameState = gameStateRef.current;
     
-    // Clear existing obstacles and coins
     gameState.obstacles = [];
     gameState.coins = [];
     
-    // Number of obstacles and coins increases with level
     const obstacleCount = 5 + level * 3;
     const coinCount = 10 + level * 5;
     
-    // Generate obstacles
     for (let i = 0; i < obstacleCount; i++) {
       const type = Math.random() > 0.5 ? 'spike' : 'pit';
       const width = type === 'spike' ? 30 : 60;
@@ -223,7 +195,6 @@ const FartHeroLoveRun: React.FC = () => {
       });
     }
     
-    // Generate coins - FIX: Added initial value 0 to the counter
     for (let i = 0; i < coinCount; i++) {
       gameState.coins.push({
         x: 800 + i * (Math.random() * 200 + 100),
@@ -235,82 +206,66 @@ const FartHeroLoveRun: React.FC = () => {
     }
   };
   
-  // Start charging fart
   const startFart = () => {
     const hero = heroRef.current;
     
     if (hero.isJumping) return;
     
-    // Start charging
     const chargeInterval = setInterval(() => {
       hero.fartCharge = Math.min(hero.fartCharge + 5, hero.maxCharge);
       
-      // Stop charging if max reached or released
       if (hero.fartCharge >= hero.maxCharge || !isPlaying) {
         clearInterval(chargeInterval);
       }
     }, 100);
     
-    // Save interval ID for cleanup
     return () => clearInterval(chargeInterval);
   };
   
-  // Release fart and jump
   const releaseFart = () => {
     const hero = heroRef.current;
     
-    // Calculate jump power based on charge
     const jumpPower = hero.fartCharge / 10;
     hero.velocity = -jumpPower;
     hero.isJumping = true;
     
-    // Play fart sound
     if (soundEnabled) {
       soundsRef.current.fart.currentTime = 0;
       soundsRef.current.fart.play().catch(err => console.log('Audio play error:', err));
     }
     
-    // Reset charge
     hero.fartCharge = 0;
   };
   
-  // Update hero position
   const updateHero = (deltaTime: number) => {
     const hero = heroRef.current;
     const gameState = gameStateRef.current;
     
-    // Apply gravity
     hero.velocity += gameState.gravity;
     hero.y += hero.velocity;
     
-    // Ground collision
     if (hero.y > gameState.ground - hero.height) {
       hero.y = gameState.ground - hero.height;
       hero.velocity = 0;
       hero.isJumping = false;
     }
     
-    // Ceiling collision
     if (hero.y < 0) {
       hero.y = 0;
       hero.velocity = 0;
     }
   };
   
-  // Draw hero on canvas
   const drawHero = (ctx: CanvasRenderingContext2D) => {
     const hero = heroRef.current;
     
-    // Draw hero body
     ctx.fillStyle = '#FF5722';
     ctx.fillRect(hero.x, hero.y, hero.width, hero.height);
     
-    // Draw hero face
     ctx.fillStyle = 'white';
-    ctx.fillRect(hero.x + 25, hero.y + 10, 10, 10); // eye
-    ctx.fillRect(hero.x + 28, hero.y + 25, 10, 5);  // mouth
+    ctx.fillRect(hero.x + 25, hero.y + 10, 10, 10);
+    ctx.fillRect(hero.x + 28, hero.y + 25, 10, 5);
     
-    // Draw fart charge meter
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.fillRect(hero.x - 10, hero.y, 5, hero.height);
     
@@ -318,7 +273,6 @@ const FartHeroLoveRun: React.FC = () => {
     const chargeHeight = (hero.fartCharge / hero.maxCharge) * hero.height;
     ctx.fillRect(hero.x - 10, hero.y + hero.height - chargeHeight, 5, chargeHeight);
     
-    // Draw fart cloud if charging or jumping
     if (hero.fartCharge > 0 || hero.isJumping) {
       ctx.fillStyle = 'rgba(255, 255, 150, 0.7)';
       ctx.beginPath();
@@ -333,7 +287,6 @@ const FartHeroLoveRun: React.FC = () => {
     }
   };
   
-  // Update obstacles position
   const updateObstacles = () => {
     const gameState = gameStateRef.current;
     
@@ -341,28 +294,21 @@ const FartHeroLoveRun: React.FC = () => {
       obstacle.x -= gameState.scrollSpeed;
     });
     
-    // Remove off-screen obstacles
     gameState.obstacles = gameState.obstacles.filter(obstacle => obstacle.x > -obstacle.width);
     
-    // Check if all obstacles passed
     if (gameState.obstacles.length === 0) {
-      // Level complete
       setLevel(prev => prev + 1);
       toast.success(`Level ${level} complete!`);
       generateLevel(level + 1);
     }
   };
   
-  // Draw obstacles on canvas
   const drawObstacles = (ctx: CanvasRenderingContext2D) => {
     const gameState = gameStateRef.current;
     
     gameState.obstacles.forEach(obstacle => {
       if (obstacle.type === 'spike') {
-        // Draw spike
         ctx.fillStyle = '#F44336';
-        
-        // Triangle shape
         ctx.beginPath();
         ctx.moveTo(obstacle.x, obstacle.y + obstacle.height);
         ctx.lineTo(obstacle.x + obstacle.width/2, obstacle.y);
@@ -370,14 +316,12 @@ const FartHeroLoveRun: React.FC = () => {
         ctx.closePath();
         ctx.fill();
       } else {
-        // Draw pit
         ctx.fillStyle = '#795548';
         ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
       }
     });
   };
   
-  // Update coins position
   const updateCoins = () => {
     const gameState = gameStateRef.current;
     
@@ -385,23 +329,19 @@ const FartHeroLoveRun: React.FC = () => {
       coin.x -= gameState.scrollSpeed;
     });
     
-    // Remove off-screen and collected coins
     gameState.coins = gameState.coins.filter(coin => coin.x > -coin.width && !coin.collected);
   };
   
-  // Draw coins on canvas
   const drawCoins = (ctx: CanvasRenderingContext2D) => {
     const gameState = gameStateRef.current;
     
     gameState.coins.forEach(coin => {
       if (!coin.collected) {
-        // Draw gold coin
         ctx.fillStyle = '#FFD700';
         ctx.beginPath();
         ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
         ctx.fill();
         
-        // Add shine effect
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.beginPath();
         ctx.arc(
@@ -415,12 +355,10 @@ const FartHeroLoveRun: React.FC = () => {
     });
   };
   
-  // Check for collisions
   const checkCollisions = () => {
     const hero = heroRef.current;
     const gameState = gameStateRef.current;
     
-    // Obstacle collisions
     gameState.obstacles.forEach(obstacle => {
       if (
         hero.x < obstacle.x + obstacle.width &&
@@ -428,7 +366,6 @@ const FartHeroLoveRun: React.FC = () => {
         hero.y < obstacle.y + obstacle.height &&
         hero.y + hero.height > obstacle.y
       ) {
-        // Collision with obstacle
         if (soundEnabled) {
           soundsRef.current.crash.currentTime = 0;
           soundsRef.current.crash.play().catch(err => console.log('Audio play error:', err));
@@ -436,20 +373,17 @@ const FartHeroLoveRun: React.FC = () => {
         
         setLives(prev => prev - 1);
         
-        // Reset hero position
         hero.x = 50;
         hero.y = gameState.ground - hero.height;
         hero.velocity = 0;
         hero.fartCharge = 0;
         
-        // Check game over
         if (lives <= 1) {
-          gameOver();
+          handleGameOver();
         }
       }
     });
     
-    // Coin collisions
     gameState.coins.forEach(coin => {
       if (
         !coin.collected &&
@@ -458,7 +392,6 @@ const FartHeroLoveRun: React.FC = () => {
         hero.y < coin.y + coin.height &&
         hero.y + hero.height > coin.y
       ) {
-        // Collect coin
         coin.collected = true;
         setScore(prev => prev + 10);
         
@@ -470,42 +403,32 @@ const FartHeroLoveRun: React.FC = () => {
     });
   };
   
-  // Draw UI elements
   const drawUI = (ctx: CanvasRenderingContext2D) => {
-    // Draw score
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
     ctx.fillText(`Score: ${score}`, 20, 30);
     
-    // Draw level
     ctx.fillText(`Level: ${level}`, 20, 60);
     
-    // Draw lives
     ctx.fillText(`Lives: ${lives}`, 20, 90);
     
-    // Draw high score
     ctx.fillText(`High Score: ${highScore}`, 600, 30);
   };
   
-  // Draw background
   const drawBackground = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-    // Sky
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
     gradient.addColorStop(0, '#87CEEB');
     gradient.addColorStop(1, '#E0F7FA');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
     
-    // Ground
     ctx.fillStyle = '#8BC34A';
     ctx.fillRect(0, gameStateRef.current.ground, width, height - gameStateRef.current.ground);
   };
   
-  // Handle game over
   const handleGameOver = () => {
     setGameOver(true);
     
-    // Update high score if needed
     if (score > highScore) {
       setHighScore(score);
       localStorage.setItem('fartHeroHighScore', score.toString());
@@ -513,7 +436,6 @@ const FartHeroLoveRun: React.FC = () => {
     }
   };
   
-  // Restart game
   const handleRestart = () => {
     setScore(0);
     setLives(3);
@@ -522,7 +444,6 @@ const FartHeroLoveRun: React.FC = () => {
     setIsPlaying(true);
   };
   
-  // Toggle sound
   const toggleSound = () => {
     setSoundEnabled(!soundEnabled);
     toast(soundEnabled ? 'Sound off' : 'Sound on');
