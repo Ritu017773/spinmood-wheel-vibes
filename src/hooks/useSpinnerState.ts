@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -33,7 +32,7 @@ export const useSpinnerState = () => {
   
   const createConfetti = (theme: Mood) => {
     // Enhanced confetti effect - increased count and duration
-    const confettiCount = 200; // More particles
+    const confettiCount = 200;
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.top = '0';
@@ -84,7 +83,7 @@ export const useSpinnerState = () => {
       container.appendChild(confetti);
     }
     
-    // Fixed 3-second duration for confetti display, regardless of modal state
+    // FIXED: Exactly 3-second duration for confetti display, regardless of modal state
     setTimeout(() => {
       if (container && container.parentNode) {
         container.parentNode.removeChild(container);
