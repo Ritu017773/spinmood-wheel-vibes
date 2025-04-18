@@ -12,6 +12,9 @@ import './App.css';
 // Import game pages
 import FartHeroLoveRun from './pages/games/FartHeroLoveRun';
 import BuildYourBlissMachine from './pages/games/BuildYourBlissMachine';
+import HowPerfectYouAre from './pages/games/HowPerfectYouAre';
+import BlinkAndMiss from './pages/games/BlinkAndMiss';
+import DontBlinkSpeedTrap from './pages/games/DontBlinkSpeedTrap';
 
 const App = () => {
   return (
@@ -26,6 +29,9 @@ const App = () => {
         {/* Game Routes */}
         <Route path="/games/fart-hero-love-run" element={<FartHeroLoveRun />} />
         <Route path="/games/build-your-bliss-machine" element={<BuildYourBlissMachine />} />
+        <Route path="/games/how-perfect-you-are" element={<HowPerfectYouAre />} />
+        <Route path="/games/blink-and-miss" element={<BlinkAndMiss />} />
+        <Route path="/games/dont-blink-speed-trap" element={<DontBlinkSpeedTrap />} />
         
         <Route path="*" element={<NotFound />} />
       </Routes>
