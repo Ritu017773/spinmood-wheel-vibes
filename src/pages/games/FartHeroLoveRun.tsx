@@ -223,8 +223,8 @@ const FartHeroLoveRun: React.FC = () => {
       });
     }
     
-    // Generate coins
-    for (let i = , i < coinCount; i++) {
+    // Generate coins - FIX: Added initial value 0 to the counter
+    for (let i = 0; i < coinCount; i++) {
       gameState.coins.push({
         x: 800 + i * (Math.random() * 200 + 100),
         y: gameState.ground - 50 - Math.random() * 100,
