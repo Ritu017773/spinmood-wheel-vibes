@@ -1,17 +1,37 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { gameCategories } from '@/data/games';
 
 const GameGrid = () => {
-  // Extract all games from all categories into a flat array
-  const games = gameCategories.flatMap(category => category.games);
+  // Extract all games from all categories into a flat array and add id and gradientBg properties
+  const games = gameCategories.flatMap(category => 
+    category.games.map(game => ({
+      ...game,
+      id: game.name.toLowerCase().replace(/\s+/g, '-'),
+      gradientBg: getRandomGradient()
+    }))
+  );
+  
+  // Function to generate random gradient backgrounds
+  function getRandomGradient() {
+    const gradients = [
+      'linear-gradient(to right bottom, #FF6B6B, #556270)',
+      'linear-gradient(to right bottom, #6A82FB, #FC5C7D)',
+      'linear-gradient(to right bottom, #43CEA2, #185A9D)',
+      'linear-gradient(to right bottom, #F7971E, #FFD200)',
+      'linear-gradient(to right bottom, #8E2DE2, #4A00E0)',
+      'linear-gradient(to right bottom, #0099F7, #F11712)',
+      'linear-gradient(to right bottom, #834D9B, #D04ED6)',
+      'linear-gradient(to right bottom, #1A2980, #26D0CE)'
+    ];
+    return gradients[Math.floor(Math.random() * gradients.length)];
+  }
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
       {games.map((game) => (
         <Link 
-          key={game.id}
+          key={game.url} // Use URL as key since it should be unique
           to={game.url}
           className="group relative overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30"
           aria-label={`Play ${game.name}`}
@@ -31,8 +51,8 @@ const GameGrid = () => {
               
               {/* Enhanced Game Visuals - Completely Redesigned */}
               <div className="absolute inset-0 opacity-80 pointer-events-none z-10">
-                {/* Game-specific visually rich effects based on the game type */}
-                {game.id === 'fart-hero' && (
+                {/* Dynamic game visual content based on game ID */}
+                {game.id === 'fart-hero-love-run' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-32 h-32 relative">
                       {/* Mario-style character */}
@@ -77,7 +97,7 @@ const GameGrid = () => {
                   </div>
                 )}
                 
-                {game.id === 'bliss-machine' && (
+                {game.id === 'build-your-bliss-machine' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-full h-full relative">
                       {/* Glowing machine */}
@@ -133,7 +153,7 @@ const GameGrid = () => {
                   </div>
                 )}
                 
-                {game.id === 'perfect-test' && (
+                {game.id === 'how-perfect-you-are' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-full h-full relative">
                       {/* Futuristic mirror */}
@@ -165,7 +185,7 @@ const GameGrid = () => {
                   </div>
                 )}
                 
-                {game.id === 'blink-miss' && (
+                {game.id === 'blink-&-miss' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-full h-full relative">
                       {/* Dark mysterious background */}
@@ -195,7 +215,7 @@ const GameGrid = () => {
                   </div>
                 )}
                 
-                {game.id === 'speed-trap' && (
+                {game.id === "don't-blink-speed-trap" && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-full h-full relative">
                       {/* Dark tech background */}
@@ -523,7 +543,7 @@ const GameGrid = () => {
                   </div>
                 )}
                 
-                {game.id === 'word-chain' && (
+                {game.id === 'word-chain-reaction' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-full h-full relative">
                       {/* Brain outline */}
@@ -566,146 +586,4 @@ const GameGrid = () => {
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div className="relative">
                           <div className="text-xl font-bold text-white animate-pulse">THINK</div>
-                          <div className="absolute top-0 left-0 right-0 -bottom-2 animate-ping opacity-10 bg-white rounded-lg"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {game.id === 'infinite-craft' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full relative">
-                      {/* Psychedelic background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-pink-700 to-blue-900 opacity-40"></div>
-                      
-                      {/* Chaos button */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <div className="bg-white/80 backdrop-blur px-4 py-2 rounded-lg text-purple-900 font-bold animate-pulse">
-                          Click for Chaos
-                        </div>
-                      </div>
-                      
-                      {/* Erupting shapes */}
-                      {Array.from({length: 20}).map((_, i) => {
-                        const shape = Math.random() > 0.5 
-                          ? 'rounded-full' 
-                          : Math.random() > 0.5 
-                            ? 'rounded-md' 
-                            : '';
-                        return (
-                          <div 
-                            key={i}
-                            className={`absolute ${shape} animate-float`}
-                            style={{
-                              top: `${Math.random() * 100}%`,
-                              left: `${Math.random() * 100}%`,
-                              width: `${5 + Math.random() * 10}px`,
-                              height: `${5 + Math.random() * 10}px`,
-                              backgroundColor: `hsl(${Math.random() * 360}, 80%, 60%)`,
-                              animationDelay: `${i * 0.1}s`,
-                              animationDuration: `${2 + Math.random() * 3}s`
-                            }}
-                          ></div>
-                        );
-                      })}
-                      
-                      {/* Changing colors */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full opacity-30 mix-blend-screen animate-pulse-color"></div>
-                    </div>
-                  </div>
-                )}
-                
-                {game.id === 'password-game' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full relative">
-                      {/* Spinning life wheel */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40">
-                        <div className="w-full h-full rounded-full border-8 border-purple-800 relative animate-spin-slow">
-                          {/* Wheel segments */}
-                          {['❤️', '🏆', '💸', '👽', '🍕'].map((icon, i) => (
-                            <div 
-                              key={i} 
-                              className="absolute w-10 h-10 rounded-full bg-white/80 backdrop-blur flex items-center justify-center"
-                              style={{
-                                top: `${20 * Math.sin(i * Math.PI * 2 / 5)}px`,
-                                left: `${20 * Math.cos(i * Math.PI * 2 / 5)}px`,
-                                transform: `translate(100%, 100%)`
-                              }}
-                            >
-                              <div className="text-xl">{icon}</div>
-                            </div>
-                          ))}
-                          
-                          {/* Center */}
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-purple-800 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-purple-700 animate-pulse"></div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Spin My Life button */}
-                      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-                        <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold px-4 py-2 rounded-lg animate-pulse">
-                          Spin My Life
-                        </div>
-                      </div>
-                      
-                      {/* Life paths */}
-                      {Array.from({length: 4}).map((_, i) => (
-                        <div 
-                          key={i}
-                          className="absolute h-0.5 bg-purple-500/50"
-                          style={{
-                            top: `${40 + i * 10}%`,
-                            left: '20%',
-                            width: '60%',
-                            transform: `rotate(${i * 5 - 7.5}deg)`
-                          }}
-                        ></div>
-                      ))}
-                      
-                      {/* Outcome icons */}
-                      <div className="absolute top-10 left-10 text-xl animate-float">🏆</div>
-                      <div className="absolute top-10 right-10 text-xl animate-float" style={{animationDelay: '0.3s'}}>🎭</div>
-                      <div className="absolute bottom-10 left-10 text-xl animate-float" style={{animationDelay: '0.6s'}}>👨‍👩‍👧‍👦</div>
-                      <div className="absolute bottom-10 right-10 text-xl animate-float" style={{animationDelay: '0.9s'}}>🌍</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              {/* Game Name */}
-              <h2 
-                className="text-2xl md:text-3xl font-extrabold text-white z-20 mt-2"
-                style={{ 
-                  textShadow: "0 2px 10px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.8)", 
-                  letterSpacing: "0.5px"
-                }}
-              >
-                {game.name}
-              </h2>
-              
-              {/* Game Description */}
-              <p 
-                className="text-lg md:text-xl font-bold text-white/90 mt-2 max-w-[70%] z-20"
-                style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)" }}
-              >
-                {game.shortDescription}
-              </p>
-              
-              {/* Hover Indicator */}
-              <div className="absolute bottom-6 right-6 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full opacity-0 transform translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                <span className="font-bold text-white text-sm md:text-base" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
-                  Play Now →
-                </span>
-              </div>
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
-  );
-};
-
-export default GameGrid;
+                          <div className="absolute top-0 left-0 right-0 -bottom
