@@ -49,7 +49,7 @@ const GameGrid = () => {
                 {game.icon}
               </div>
               
-              {/* Enhanced Game Visuals - Completely Redesigned */}
+              {/* Enhanced Game Visuals */}
               <div className="absolute inset-0 opacity-80 pointer-events-none z-10">
                 {/* Dynamic game visual content based on game ID */}
                 {game.id === 'fart-hero-love-run' && (
@@ -587,3 +587,4 @@ const GameGrid = () => {
                         <div className="relative">
                           <div className="text-xl font-bold text-white animate-pulse">THINK</div>
                           <div className="absolute top-0 left-0 right-0 -bottom
+"
